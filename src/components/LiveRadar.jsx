@@ -109,6 +109,8 @@ export default function LiveRadar() {
           date,
           bullets: bulletsList
         };
+      });
+
       // Deduplicate by headline (case-insensitive)
       const uniqueNews = [];
       const seenHeadlines = new Set();
@@ -148,8 +150,8 @@ export default function LiveRadar() {
           </p>
         </div>
 
-        {/* Header Actions */}
-        <div className="radar-header-actions" style={{ justifyContent: 'space-between', marginBottom: '2rem' }}>
+        {/* Header Status */}
+        <div className="radar-header-actions" style={{ justifyContent: 'flex-start', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span style={{
               display: 'inline-block',
@@ -163,11 +165,6 @@ export default function LiveRadar() {
               {loading ? 'Fetching live updates...' : 'Connected to Live Feed'}
             </span>
           </div>
-          
-          <button className="radar-config-btn" onClick={() => fetchNews(sheetId)} title="Refresh Feed">
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            Refresh
-          </button>
         </div>
 
         {/* News Feed Grid */}
@@ -177,7 +174,6 @@ export default function LiveRadar() {
               <div className="news-card" key={n}>
                 <div className="news-meta">
                   <div className="shimmer-loader" style={{ width: '80px', height: '20px' }} />
-                  <div className="shimmer-loader" style={{ width: '60px', height: '14px' }} />
                 </div>
                 <div className="shimmer-loader" style={{ width: '100%', height: '24px', marginBottom: '1rem' }} />
                 <div className="shimmer-loader" style={{ width: '85%', height: '18px', marginBottom: '1.5rem' }} />
@@ -199,7 +195,6 @@ export default function LiveRadar() {
                                     item.category.includes('admission') ? '#10b981' : 'var(--navy-deep)',
                     color: item.category.includes('scholarship') ? 'var(--navy-deep)' : '#ffffff'
                   }}>{item.category}</span>
-                  <time className="news-date">{item.date}</time>
                 </div>
                 <h3 className="news-title">{item.headline}</h3>
                 
@@ -214,89 +209,6 @@ export default function LiveRadar() {
         )}
 
       </div>
-            <div className="modal-header">
-              <h3 className="modal-title">Radar Config Panel</h3>
-              <button className="modal-close" onClick={() => setShowConfig(false)}>
-                <X size={20} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveConfig}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="sheet-id-input">Google Spreadsheet ID</label>
-                <input
-                  id="sheet-id-input"
-                  type="text"
-                  className="form-input"
-                  placeholder="e.g. 1a2b3C4d5E6f7G..."
-                  value={configInput}
-                  onChange={(e) => setConfigInput(e.target.value)}
-                />
-                <p className="form-help">
-                  Paste the ID of your Google Spreadsheet. The application will fetch from <strong>Sheet1</strong> using the <em>opensheet.elk.sh</em> wrapper.
-                </p>
-              </div>
-
-              <div style={{
-                backgroundColor: 'var(--bg-base)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--border-radius-sm)',
-                padding: '0.85rem 1rem',
-                fontSize: '0.75rem',
-                color: 'var(--text-dark-secondary)',
-                marginBottom: '1.5rem',
-                lineHeight: '1.5'
-              }}>
-                <strong style={{ display: 'block', marginBottom: '0.35rem' }}>How to prepare your Spreadsheet:</strong>
-                <ol style={{ paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                  <li>Column headers must be: <strong>Headline</strong>, <strong>Date</strong>, <strong>Category</strong>, <strong>BulletPoints</strong> (or Bullet1, Bullet2, Bullet3), and <strong>Link</strong>.</li>
-                  <li>Click <strong>Share</strong> on your Google Sheet and set to <strong>"Anyone with the link can view"</strong>.</li>
-                  <li>Copy the ID from the URL (the text between `/d/` and `/edit`).</li>
-                </ol>
-              </div>
-
-              <div className="modal-actions">
-                {sheetId && (
-                  <button type="button" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }} onClick={handleResetConfig}>
-                    Reset to Demo
-                  </button>
-                )}
-                <button type="button" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }} onClick={() => setShowConfig(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.8rem' }}>
-                  Save Configuration
-                </button>
-              </div>
-            </form>
-
-          </div>
-        </div>
-      )}
-
-      {/* Floating Toast Notification */}
-      {toastMessage && (
-        <div style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          backgroundColor: 'var(--navy-deep)',
-          color: '#ffffff',
-          padding: '1rem 1.5rem',
-          borderRadius: 'var(--border-radius-sm)',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          zIndex: 2000,
-          animation: 'fadeInUp 0.3s ease-out',
-          borderLeft: '4px solid var(--blue-accent)'
-        }}>
-          <CheckCircle size={18} style={{ color: 'var(--blue-accent)' }} />
-          <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{toastMessage}</span>
-        </div>
-      )}
-
     </section>
   );
 }

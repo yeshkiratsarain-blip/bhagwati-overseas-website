@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sparkles, Video, Mic, BarChart3, Shield, ArrowUpRight, GraduationCap } from 'lucide-react';
 
-const VISA_COACH_URL = 'http://localhost:8080';
+const VISA_COACH_URL = 'https://bhagwati-visa-coach.vercel.app/';
 
 export default function VisaCoachPromo() {
   return (
@@ -56,16 +56,19 @@ export default function VisaCoachPromo() {
 
               </div>
 
-              <a 
-                href={VISA_COACH_URL} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn btn-gold"
-                style={{ textDecoration: 'none' }}
-              >
-                <span>START INTERVIEW</span>
-                <ArrowUpRight size={18} />
-              </a>
+              <div className="coach-action-buttons">
+                <a 
+                  href={VISA_COACH_URL} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-gold coach-cta-btn"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <GraduationCap size={18} />
+                  <span>PRACTICE MOCK INTERVIEW</span>
+                  <ArrowUpRight size={18} />
+                </a>
+              </div>
               <span style={{ 
                 display: 'block', 
                 fontSize: '0.75rem', 

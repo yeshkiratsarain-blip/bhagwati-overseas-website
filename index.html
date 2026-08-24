@@ -23,28 +23,15 @@
   <body>
     <div id="root" style="display: flex; flex-direction: column; min-height: 100vh;">
       
-      <!-- Top Contact Header Bar -->
+      <!-- Top Highlighted Phone Header Bar -->
       <div class="top-bar">
-        <div class="container top-bar-content">
-          <div class="top-bar-info">
-            <div class="info-item">
-              <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
-              <span>Ladwa, Kurukshetra (Haryana)</span>
-            </div>
-            <div class="info-item">
-              <i data-lucide="phone" style="width: 13px; height: 13px;"></i>
-              <span><a href="tel:+918278089882" style="color: inherit;">+91 82780 89882</a></span>
-            </div>
-            <div class="info-item">
-              <i data-lucide="mail" style="width: 13px; height: 13px;"></i>
-              <span><a href="mailto:official.bhagwatioverseas@gmail.com" style="color: inherit;">official.bhagwatioverseas@gmail.com</a></span>
-            </div>
-          </div>
-          <div class="top-bar-info">
-            <div class="info-item">
-              <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
-              <span>Mon – Sat: 9:30 AM – 5:00 PM</span>
-            </div>
+        <div class="container top-bar-content-centered">
+          <div class="top-bar-phone-highlight">
+            <span class="top-bar-lead-text">Have Questions? Talk Directly with Our Senior Visa Specialist:</span>
+            <a href="tel:+918278089882" class="phone-highlight-badge" title="Click to Call +91 82780 89882">
+              <i data-lucide="phone" style="width: 14px; height: 14px;" class="phone-icon-pulse"></i>
+              <span>+91 82780 89882</span>
+            </a>
           </div>
         </div>
       </div>
@@ -59,25 +46,40 @@
           </a>
 
           <!-- Desktop Navigation Links -->
-          <nav>
+          <nav class="desktop-nav">
             <ul class="nav-menu" id="desktop-menu">
               <li>
                 <button class="nav-link active" id="tab-home" onclick="switchTab('home')">Home</button>
               </li>
               <li>
+                <button class="nav-link" id="tab-destinations" onclick="switchTab('destinations')">Destinations</button>
+              </li>
+              <li>
                 <button class="nav-link" id="tab-radar" onclick="switchTab('radar')">Daily News/Updates</button>
               </li>
               <li>
-                <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer" class="nav-link">Interview Preparation Tool</a>
+                <a href="https://bhagwati-visa-coach.vercel.app/" target="_blank" rel="noopener noreferrer" class="nav-link">Interview Prep Tool</a>
               </li>
               <li>
                 <button class="nav-link" id="tab-services" onclick="switchTab('services')">Services</button>
               </li>
-              <li style="margin-left: 1rem;">
-                <button class="nav-link nav-cta" onclick="openAssessmentModal()">Book Free Assessment</button>
+              <li>
+                <button class="nav-link" id="tab-about" onclick="switchTab('about')">About Us</button>
               </li>
             </ul>
           </nav>
+
+          <!-- Action Buttons Right Group -->
+          <div class="nav-header-actions">
+            <button class="btn btn-orange" onclick="openAIChatModal()" style="border-radius: 9999px; padding: 0.45rem 0.9rem; font-size: 0.78rem; white-space: nowrap;">
+              <i data-lucide="bot" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i>
+              <span>Talk to AI Expert</span>
+            </button>
+
+            <button class="btn btn-orange btn-glow nav-cta-orange" onclick="openAssessmentModal()" style="padding: 0.45rem 0.9rem; font-size: 0.78rem; white-space: nowrap;">
+              Book Free Assessment
+            </button>
+          </div>
 
           <!-- Mobile Menu Button -->
           <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -89,10 +91,13 @@
         <!-- Mobile Navigation Dropdown -->
         <div class="nav-menu mobile-menu" id="mobile-menu-dropdown">
           <button class="nav-link active" id="mobile-tab-home" onclick="switchTab('home')">Home</button>
+          <button class="nav-link" id="mobile-tab-destinations" onclick="switchTab('destinations')">Top Study Destinations</button>
           <button class="nav-link" id="mobile-tab-radar" onclick="switchTab('radar')">Daily News/Updates</button>
-          <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer" class="nav-link" onclick="toggleMobileMenu()">Interview Preparation Tool</a>
+          <a href="https://bhagwati-visa-coach.vercel.app/" target="_blank" rel="noopener noreferrer" class="nav-link" onclick="toggleMobileMenu()">Interview Prep Tool</a>
           <button class="nav-link" id="mobile-tab-services" onclick="switchTab('services')">Services</button>
-          <button class="nav-link nav-cta" onclick="openAssessmentModal(); toggleMobileMenu();" style="margin-top: 1rem;">Book Free Assessment</button>
+          <button class="nav-link" id="mobile-tab-about" onclick="switchTab('about')">About Us</button>
+          <button class="btn btn-orange" onclick="openAIChatModal(); toggleMobileMenu();" style="margin-top: 0.5rem; width: 100%;">Talk to AI Expert</button>
+          <button class="btn btn-orange btn-glow" onclick="openAssessmentModal(); toggleMobileMenu();" style="margin-top: 0.5rem; width: 100%;">Book Free Assessment</button>
         </div>
       </header>
 
@@ -108,74 +113,178 @@
               
               <!-- Hero Left Content -->
               <div class="animate-fade-in">
-                <span class="hero-tag">
-                  <i data-lucide="shield-check" style="width: 12px; height: 12px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i>
-                  Ladwa's Premier Study Advisor
+                <span class="hero-tag section-tag-orange">
+                  <i data-lucide="shield-check" style="width: 13px; height: 13px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i>
+                  Your Global Journey Starts Here
                 </span>
                 <h1 class="hero-title">
-                  Your Trusted Gateway to <span class="text-gradient">Global Education</span>
+                  Top Study Abroad Consultant & <span class="text-gradient">Visa Experts</span>
                 </h1>
                 <p class="hero-description">
-                  Empowering students from Kurukshetra and beyond to achieve high-score test records and visa approvals for top destinations including the UK, Canada, USA, Australia, and Germany.
+                  Expert guidance, test prep, and transparent pathways to top destinations — bringing world-class education directly to Ladwa, Kurukshetra.
                 </p>
                 
                 <div class="hero-buttons">
-                  <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none;">
-                    <span>START INTERVIEW</span>
-                    <i data-lucide="arrow-right" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
-                  </a>
-                  <button class="btn btn-secondary" onclick="switchTab('services'); scrollToElement('services-view');">
-                    <span>Visit Ladwa Office</span>
+                  <button class="btn btn-orange btn-glow" onclick="openAssessmentModal()">
+                    <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+                    <span>Book Free Counseling</span>
                   </button>
+
+                  <a href="https://bhagwati-visa-coach.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none;">
+                    <i data-lucide="graduation-cap" style="width: 16px; height: 16px;"></i>
+                    <span>PRACTICE MOCK INTERVIEW</span>
+                    <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                  </a>
                 </div>
 
                 <div class="hero-trust-badges">
                   <div class="trust-badge">
-                    <span class="trust-badge-number">98%</span>
+                    <span class="trust-badge-number text-orange">98%</span>
                     <span class="trust-badge-text">Visa Success<br />Rate</span>
                   </div>
                   <div style="width: 1px; height: 2rem; background-color: var(--border-color);"></div>
                   <div class="trust-badge">
-                    <span class="trust-badge-number">500+</span>
+                    <span class="trust-badge-number text-orange">500+</span>
                     <span class="trust-badge-text">Partner<br />Universities</span>
                   </div>
                   <div style="width: 1px; height: 2rem; background-color: var(--border-color);"></div>
                   <div class="trust-badge">
-                    <span class="trust-badge-number">100%</span>
+                    <span class="trust-badge-number text-orange">100%</span>
                     <span class="trust-badge-text">Transparent<br />Process</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Hero Right Visual Area -->
+              <!-- Hero Right Visual Area - Modern Study Abroad Showcase -->
               <div class="hero-visual animate-fade-in" style="animation-delay: 0.2s;">
-                <div class="hero-image-wrapper">
-                  <img src="./src/assets/logo_circular.png" alt="Bhagwati Overseas Study Abroad Logo" class="hero-image-logo animate-float" />
+                <div class="hero-showcase-card">
+                  
+                  <!-- Card Top Live Status Header -->
+                  <div class="showcase-header">
+                    <div class="showcase-live-badge">
+                      <span class="live-pulse-dot"></span>
+                      <span>2026/2027 Intakes Open</span>
+                    </div>
+                    <span class="showcase-tag">Direct DLI Partners</span>
+                  </div>
+
+                  <!-- Destination Flags Showcase -->
+                  <div class="showcase-destinations-bar">
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇬🇧</span>
+                      <span>UK</span>
+                    </div>
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇦🇺</span>
+                      <span>Australia</span>
+                    </div>
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇨🇦</span>
+                      <span>Canada</span>
+                    </div>
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇩🇪</span>
+                      <span>Germany</span>
+                    </div>
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇺🇸</span>
+                      <span>USA</span>
+                    </div>
+                    <div class="showcase-dest-chip" onclick="switchTab('destinations')">
+                      <span class="dest-flag">🇳🇿</span>
+                      <span>NZ</span>
+                    </div>
+                  </div>
+
+                  <!-- Feature Showcase Grid -->
+                  <div class="showcase-features-grid">
+                    <div class="showcase-feature-item">
+                      <div class="feature-item-icon bg-blue-subtle">
+                        <i data-lucide="graduation-cap" style="width: 18px; height: 18px; color: var(--navy-deep);"></i>
+                      </div>
+                      <div>
+                        <h4 class="feature-item-title">Top University Admissions</h4>
+                        <p class="feature-item-desc">500+ Global DLIs • Fast 48h Offer Letters</p>
+                      </div>
+                    </div>
+
+                    <div class="showcase-feature-item">
+                      <div class="feature-item-icon bg-orange-subtle">
+                        <i data-lucide="shield-check" style="width: 18px; height: 18px; color: var(--orange-bright);"></i>
+                      </div>
+                      <div>
+                        <h4 class="feature-item-title">98% Visa Success Rate</h4>
+                        <p class="feature-item-desc">Certified Pre-CAS & GST SOP Verification</p>
+                      </div>
+                    </div>
+
+                    <div class="showcase-feature-item">
+                      <div class="feature-item-icon bg-emerald-subtle">
+                        <i data-lucide="bot" style="width: 18px; height: 18px; color: #10b981;"></i>
+                      </div>
+                      <div>
+                        <h4 class="feature-item-title">AI Visa Coach & Mock Prep</h4>
+                        <p class="feature-item-desc">Real-time Credibility Interview Simulations</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fast Action Footer -->
+                  <div class="showcase-card-footer">
+                    <button class="showcase-eval-btn" onclick="openAssessmentModal()">
+                      <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                      <span>Check My Admission & Visa Eligibility</span>
+                      <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                    </button>
+                  </div>
+
                 </div>
-                
-                <!-- Floating badge 1: UK Visas -->
+
+                <!-- Floating Badge 1: Top University Admissions -->
                 <div class="hero-floating-card floating-card-1">
-                  <div class="floating-icon">
+                  <div class="floating-icon" style="background-color: var(--orange-light-bg); color: var(--orange-bright);">
                     <i data-lucide="graduation-cap" style="width: 16px; height: 16px;"></i>
                   </div>
                   <div class="floating-card-text">
-                    <span class="floating-card-title">Study in UK</span>
-                    <span class="floating-card-desc">Credibility Interview Support</span>
+                    <span class="floating-card-title">Top University Admissions</span>
+                    <span class="floating-card-desc">UK • Australia • Canada • Germany</span>
                   </div>
                 </div>
 
-                <!-- Floating badge 2: Live Updates -->
-                <div class="hero-floating-card floating-card-2" onclick="switchTab('radar')" style="cursor: pointer;">
-                  <div class="floating-icon">
-                    <i data-lucide="globe" style="width: 16px; height: 16px;"></i>
+                <!-- Floating Badge 2: AI Profile Expert -->
+                <div class="hero-floating-card floating-card-2" onclick="openAIChatModal()" style="cursor: pointer;">
+                  <div class="floating-icon" style="background-color: var(--blue-light-bg); color: var(--blue-accent);">
+                    <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
                   </div>
                   <div class="floating-card-text">
-                    <span class="floating-card-title">Daily Updates</span>
-                    <span class="floating-card-desc">Live Visa Feed Active</span>
+                    <span class="floating-card-title">AI Profile Evaluator</span>
+                    <span class="floating-card-desc">Instant 24/7 Gap & Score Audit</span>
                   </div>
                 </div>
               </div>
 
+            </div>
+          </section>
+
+          <!-- 4-Stat Banner Section (Matching User Screenshot 1) -->
+          <section class="stat-banner-sec animate-fade-in">
+            <div class="container stat-banner-grid">
+              <div class="stat-banner-item">
+                <span class="stat-banner-number">850<span class="accent-plus">+</span></span>
+                <span class="stat-banner-label">University Partners</span>
+              </div>
+              <div class="stat-banner-item">
+                <span class="stat-banner-number">30<span class="accent-plus">+</span></span>
+                <span class="stat-banner-label">Countries to study</span>
+              </div>
+              <div class="stat-banner-item">
+                <span class="stat-banner-number">Up to 100<span class="accent-plus">%</span></span>
+                <span class="stat-banner-label">Scholarships Possible</span>
+              </div>
+              <div class="stat-banner-item">
+                <span class="stat-banner-number">100<span class="accent-plus">%</span></span>
+                <span class="stat-banner-label">Visa Application Support</span>
+              </div>
             </div>
           </section>
 
@@ -232,6 +341,11 @@
 
         </div>
 
+        <!-- ================= DESTINATIONS TAB ================= -->
+        <div id="view-destinations" class="tab-view">
+          <!-- Rendered dynamically by javascript -->
+        </div>
+
         <!-- ================= LIVE RADAR TAB ================= -->
         <div id="view-radar" class="tab-view">
           <!-- Rendered dynamically by javascript -->
@@ -247,6 +361,11 @@
           <!-- Rendered dynamically by javascript -->
         </div>
 
+        <!-- ================= ABOUT US TAB ================= -->
+        <div id="view-about" class="tab-view">
+          <!-- Rendered dynamically by javascript -->
+        </div>
+
       </main>
 
       <!-- Main Website Footer -->
@@ -255,10 +374,8 @@
           
           <!-- Logo and Description -->
           <div class="footer-brand">
-            <div class="brand" style="display: flex; align-items: center; gap: 0.8rem;">
-              <div class="footer-logo-wrapper">
-                <img src="./src/assets/logo_horizontal.png" alt="Bhagwati Overseas Study Abroad Logo" class="footer-logo" />
-              </div>
+            <div class="footer-brand-container">
+              <img src="./src/assets/logo_horizontal_white.png" alt="Bhagwati Overseas Study Abroad" class="footer-logo" />
             </div>
             <p class="footer-brand-desc">
               Bhagwati Overseas Study Abroad is Ladwa's leading consultancy, dedicated to helping students secure admissions and visas in top institutions globally.
@@ -280,7 +397,7 @@
                 </button>
               </li>
               <li>
-                <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer" class="footer-link">
+                <a href="https://bhagwati-visa-coach.vercel.app/" target="_blank" rel="noopener noreferrer" class="footer-link">
                   Interview Preparation Tool
                 </a>
               </li>
@@ -422,7 +539,6 @@
               <article class="news-card animate-fade-in" style="animation-delay: ${index * 0.1}s;">
                 <div class="news-meta">
                   <span class="news-tag" style="background-color: ${catColorClass}; color: ${catTextColor};">${item.category}</span>
-                  <time class="news-date">${item.date}</time>
                 </div>
                 <h3 class="news-title">${item.headline}</h3>
                 
@@ -449,19 +565,14 @@
                 </p>
               </div>
 
-              <!-- Header Actions -->
-              <div class="radar-header-actions" style="justify-content: space-between; margin-bottom: 2rem;">
+              <!-- Header Status -->
+              <div class="radar-header-actions" style="justify-content: flex-start; margin-bottom: 2rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
                   <span style="display: inline-block; width: 8px; height: 8px; background-color: ${loading ? 'var(--blue-accent)' : '#10b981'}; border-radius: 50%; box-shadow: ${loading ? '0 0 8px var(--blue-accent)' : '0 0 8px #10b981'}"></span>
                   <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-dark-secondary);">
                     ${loading ? 'Fetching updates...' : 'Connected to Live Feed'}
                   </span>
                 </div>
-                
-                <button class="radar-config-btn" onclick="triggerRefreshFeed()" title="Refresh Feed">
-                  <i data-lucide="refresh-cw" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;" class="${loading ? 'animate-spin' : ''}"></i>
-                  Refresh
-                </button>
               </div>
 
               <!-- News Feed Grid -->
@@ -528,7 +639,7 @@
                     </div>
 
                     <a 
-                      href="http://localhost:8080" 
+                      href="https://bhagwati-visa-coach.vercel.app/" 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       class="btn btn-gold"
@@ -759,6 +870,94 @@
         `;
       }
 
+      function getAboutHTML() {
+        return `
+          <section class="section-padding about-section animate-fade-in" id="about-view">
+            <div class="container">
+              
+              <div class="section-header">
+                <span class="section-tag">Empowering Student Ambitions</span>
+                <h2 class="section-title">About Bhagwati Overseas Study Abroad</h2>
+                <p class="section-desc">
+                  Bringing world-class, transparent, and ethical study abroad guidance to students across Ladwa, Kurukshetra, and Haryana.
+                </p>
+              </div>
+
+              <div class="about-story-box">
+                <div class="about-story-header">
+                  <div class="about-story-icon">
+                    <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
+                  </div>
+                  <h3>Our Story</h3>
+                </div>
+                <p class="about-story-p">
+                  Founded in 2021 in Ladwa, Haryana, Bhagwati Overseas was created with a clear mission: to bring world-class, ethical, and transparent study abroad guidance to students in our region. We believe every student deserves honest career counseling, zero hidden charges, and genuine end-to-end support—from exam preparation to visa grants.
+                </p>
+              </div>
+
+              <div style="margin-top: 3.5rem; margin-bottom: 3.5rem;">
+                <h3 class="subsection-title">Our Core Values</h3>
+                <p class="subsection-desc">The principles that guide our student-first philosophy every single day.</p>
+                
+                <div class="values-grid">
+                  
+                  <div class="value-card">
+                    <div class="value-icon-wrapper gold-glow">
+                      <i data-lucide="shield-check" style="width: 32px; height: 32px; color: var(--gold-accent);"></i>
+                    </div>
+                    <h4>100% Transparency</h4>
+                    <p>Direct, honest advice with complete clarity at every step of the visa process.</p>
+                  </div>
+
+                  <div class="value-card">
+                    <div class="value-icon-wrapper blue-glow">
+                      <i data-lucide="book-open" style="width: 32px; height: 32px; color: var(--blue-accent);"></i>
+                    </div>
+                    <h4>Cutting-Edge Technology</h4>
+                    <p>Providing students with modern AI tools, live visa tracking, and automated interview training.</p>
+                  </div>
+
+                  <div class="value-card">
+                    <div class="value-icon-wrapper green-glow">
+                      <i data-lucide="graduation-cap" style="width: 32px; height: 32px; color: #10b981;"></i>
+                    </div>
+                    <h4>Personal Mentorship</h4>
+                    <p>Dedicated one-on-one handholding for university selection, documentation, and visa filing.</p>
+                  </div>
+
+                </div>
+              </div>
+
+              <div style="margin-top: 3.5rem;">
+                <h3 class="subsection-title">Leadership Team</h3>
+                <p class="subsection-desc">Dedicated leaders committed to guiding your global education journey.</p>
+                
+                <div class="leader-grid">
+                  
+                  <div class="leader-card">
+                    <div class="leader-avatar">
+                      <i data-lucide="users" style="width: 30px; height: 30px;"></i>
+                    </div>
+                    <h4 class="leader-name">Yashkirat</h4>
+                    <span class="leader-role">Founder & Director</span>
+                  </div>
+
+                  <div class="leader-card">
+                    <div class="leader-avatar">
+                      <i data-lucide="users" style="width: 30px; height: 30px;"></i>
+                    </div>
+                    <h4 class="leader-name">Rishabh Punia</h4>
+                    <span class="leader-role">Director</span>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </section>
+        `;
+      }
+
       // Tab switcher function
       function switchTab(tabId) {
         activeTab = tabId;
@@ -770,7 +969,10 @@
         });
 
         // Show selected view
-        document.getElementById(`view-${tabId}`).classList.add('active');
+        const targetView = document.getElementById(`view-${tabId}`);
+        if (targetView) {
+          targetView.classList.add('active');
+        }
 
         // Update nav links active state
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -785,29 +987,221 @@
         if (mobBtn) mobBtn.classList.add('active');
 
         // Close mobile menu
-        document.getElementById('mobile-menu-dropdown').classList.remove('mobile-open');
-        document.getElementById('menu-icon-burger').setAttribute('data-lucide', 'menu');
+        const mobMenu = document.getElementById('mobile-menu-dropdown');
+        if (mobMenu) mobMenu.classList.remove('mobile-open');
+        const burgerIcon = document.getElementById('menu-icon-burger');
+        if (burgerIcon) burgerIcon.setAttribute('data-lucide', 'menu');
         
         // Render components if they are active
-        if (tabId === 'radar') {
+        if (tabId === 'destinations') {
+          renderDestinationsTab();
+        } else if (tabId === 'radar') {
           renderRadarTab();
         } else if (tabId === 'coach') {
           renderCoachTab();
         } else if (tabId === 'services') {
           renderServicesTab();
+        } else if (tabId === 'about') {
+          renderAboutTab();
         }
 
         // Re-replace icons for dynamic injections
-        lucide.createIcons();
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      }
+
+      function getDestinationsHTML() {
+        return `
+          <section class="section-padding destinations-section animate-fade-in" id="destinations-view">
+            <div class="container">
+              
+              <div class="section-header">
+                <span class="section-tag section-tag-orange">GLOBAL ACADEMIC PATHWAYS</span>
+                <h2 class="section-title">Top Study & Visa Destinations</h2>
+                <p class="section-desc">
+                  Explore world-renowned education hubs. Our Ladwa team provides specialized profile evaluation, application fee waivers, and guaranteed visa support for each destination.
+                </p>
+              </div>
+
+              <div class="destinations-grid">
+                
+                <div class="destination-card" onclick="openAssessmentModal('United Kingdom (UK)')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80" alt="UK Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Up to 3-Year Post Study Work Permit</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">United Kingdom (UK)</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">MOI & English Waiver Options Available</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Canada')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80" alt="Canada Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Fast-Track Visa Intakes & PGWP Pathways</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Canada</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Up to 3-Year Post-Graduation Work Permit & PR Points</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('United States (USA)')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=800&q=80" alt="USA Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">3-Year STEM OPT & High Scholarships</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">United States (USA)</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Top Ivy League & State Universities with Assistantships</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Australia')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=800&q=80" alt="Australia Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Priority Regional Processing</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Australia</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Up to 4-Year Work Rights & High Hourly Wages</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Germany & Europe')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80" alt="Germany Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Zero / Low Tuition & 18-Month Job Seeker</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Germany & Europe</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Public University Admissions (Ireland, France, Italy, Cyprus)</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Singapore')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" alt="Singapore Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Global Financial Hub & Fast Visa Approval</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Singapore</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">2-3 Week Visa Turnaround with Top Asian Universities</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Mauritius')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80" alt="Mauritius Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Affordable Quality Education</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Mauritius</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Easy Visa Clearance & Zero Academic Gap Obstacles</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('New Zealand')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80" alt="New Zealand Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Spouse Work Rights & High PR Points</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">New Zealand</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">Safe, Peaceful Environment & Excellent Quality of Life</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+                <div class="destination-card" onclick="openAssessmentModal('Russia')">
+                  <div class="destination-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1513326718677-b964603b136b?auto=format&fit=crop&w=800&q=80" alt="Russia Study Abroad" class="destination-image" />
+                    <div class="destination-overlay"></div>
+                    <span class="destination-badge">Top Ranked MBBS & Medical Programs</span>
+                  </div>
+                  <div class="destination-content">
+                    <div class="destination-header-row">
+                      <h3 class="destination-name">Russia</h3>
+                      <div class="destination-arrow-box"><i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i></div>
+                    </div>
+                    <p class="destination-subtext">WHO / NMC Approved Universities with No IELTS Required</p>
+                    <button class="destination-btn"><span>Explore Pathways & Apply</span><i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i></button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+        `;
       }
 
       // Function to render static content inside tabs
+      function renderDestinationsTab() {
+        document.getElementById('view-destinations').innerHTML = getDestinationsHTML();
+      }
+
       function renderCoachTab() {
         document.getElementById('view-coach').innerHTML = getCoachHTML();
       }
 
       function renderServicesTab() {
         document.getElementById('view-services').innerHTML = getServicesHTML();
+      }
+
+      function renderAboutTab() {
+        document.getElementById('view-about').innerHTML = getAboutHTML();
+      }
+
+      function openAIChatModal() {
+        const modal = document.getElementById('ai-chat-modal-overlay');
+        if (modal) modal.style.display = 'flex';
+      }
+
+      function closeAIChatModal() {
+        const modal = document.getElementById('ai-chat-modal-overlay');
+        if (modal) modal.style.display = 'none';
       }
 
       // Fetch news from Google Sheet or fallback
@@ -1199,7 +1593,7 @@
 
           <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
             <button type="button" onclick="closeAssessmentModal()" class="btn btn-secondary" style="flex: 1; padding: 0.65rem 1rem;">Cancel</button>
-            <button type="submit" id="assess-submit-btn" class="btn btn-primary" style="flex: 2; padding: 0.65rem 1rem;">
+            <button type="submit" id="assess-submit-btn" class="btn btn-orange btn-glow" style="flex: 2; padding: 0.65rem 1rem;">
               <span>Submit Assessment Request</span>
             </button>
           </div>
@@ -1207,5 +1601,306 @@
 
       </div>
     </div>
+
+    <!-- AI Study Abroad Counselor Chatbot Modal Overlay -->
+    <div id="ai-chat-modal-overlay" class="ai-chat-overlay" style="display: none;" onclick="closeAIChatModal()">
+      <div class="ai-chat-modal animate-fade-in" onclick="event.stopPropagation();">
+        
+        <div class="ai-chat-header">
+          <div class="ai-chat-header-info">
+            <div class="ai-avatar-box">
+              <i data-lucide="bot" style="width: 22px; height: 22px; color: #ffffff;"></i>
+              <span class="online-indicator"></span>
+            </div>
+            <div>
+              <h3 class="ai-name">Bhagwati AI Counselor</h3>
+              <p class="ai-status">Online • Study Abroad & Visa Specialist</p>
+            </div>
+          </div>
+          <button class="ai-close-btn" onclick="closeAIChatModal()" aria-label="Close Chat">&times;</button>
+        </div>
+
+        <div class="ai-chat-body" id="ai-chat-msg-body">
+          <div class="ai-notice-box">
+            <i data-lucide="shield-check" style="width: 16px; height: 16px; color: var(--orange-bright);"></i>
+            <span>Real-time visa guidelines for UK, Australia, Canada, Germany & USA.</span>
+          </div>
+
+          <div class="chat-bubble-wrapper ai-msg">
+            <div class="chat-bubble-content">
+              <div class="chat-structured-content">
+                <p class="chat-p-line">Hello! I am your AI Study Abroad Counselor. Tell me about your academic background (10+2 / Degree percentage, board, academic gap, IELTS/PTE score, or preferred country) and I will provide you with a sharp, realistic visa evaluation.</p>
+              </div>
+              <span class="chat-bubble-time">Just now</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-quick-prompts">
+          <span class="prompts-label">Quick Profile Queries:</span>
+          <div class="prompts-scroll">
+            <button class="prompt-chip" onclick="handleQuickPrompt('Can I apply to UK with 3-year gap & HBSE 12th?')">UK with 3-year gap & HBSE 12th?</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Australia PTE cutoff & funds 2026')">Australia PTE & funds 2026</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Germany APS & Blocked Account setup')">Germany APS & Blocked Account</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Canada SDS vs Non-SDS & PGWP rules')">Canada SDS & PGWP rules</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Spouse visa eligibility for Master\\'s degrees')">Spouse visa options</button>
+          </div>
+        </div>
+
+        <form class="ai-chat-footer" onsubmit="handleAIChatSubmit(event)">
+          <input type="text" id="ai-chat-input-field" class="ai-chat-input" placeholder="Ask about academic gaps, PTE/IELTS cutoffs, fees, funds..." />
+          <button type="submit" class="ai-send-btn">
+            <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Floating Bright Orange AI Expert Widget (Bottom Right) -->
+    <button class="floating-ai-widget" onclick="openAIChatModal()" title="Talk to AI Expert">
+      <span class="floating-ai-pill">
+        <i data-lucide="sparkles" style="width: 13px; height: 13px; color: var(--orange-bright);"></i>
+        Talk to AI Expert
+      </span>
+      <div class="floating-ai-btn">
+        <i data-lucide="bot" style="width: 24px; height: 24px;"></i>
+      </div>
+    </button>
+
+    <script>
+      function handleQuickPrompt(text) {
+        document.getElementById('ai-chat-input-field').value = text;
+        handleAIChatSubmit(new Event('submit'));
+      }
+
+      function formatResponseToHtml(title, bullets) {
+        const bulletsHtml = bullets.map(b => {
+          const parts = b.split(':');
+          if (parts.length > 1) {
+            return `
+              <div class="chat-bullet-row">
+                <span class="chat-bullet-dot"></span>
+                <div>
+                  <strong class="chat-bullet-label">${parts[0].trim()}:</strong>
+                  <span class="chat-bullet-body">${parts.slice(1).join(':').trim()}</span>
+                </div>
+              </div>
+            `;
+          }
+          return `
+            <div class="chat-bullet-row">
+              <span class="chat-bullet-dot"></span>
+              <span class="chat-bullet-body">${b}</span>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="chat-structured-content">
+            <p class="chat-p-line">${title}</p>
+            ${bulletsHtml}
+          </div>
+        `;
+      }
+
+      function handleAIChatSubmit(e) {
+        e.preventDefault();
+        const input = document.getElementById('ai-chat-input-field');
+        const text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+
+        const msgBody = document.getElementById('ai-chat-msg-body');
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // Add user message
+        const userHtml = `
+          <div class="chat-bubble-wrapper user-msg animate-fade-in">
+            <div class="chat-bubble-content">
+              <p class="chat-user-text">${text}</p>
+              <span class="chat-bubble-time">${timeStr}</span>
+            </div>
+          </div>
+        `;
+        msgBody.insertAdjacentHTML('beforeend', userHtml);
+        msgBody.scrollTop = msgBody.scrollHeight;
+
+        // Generate realistic grounded response using Dynamic Country & Profile Engine
+        setTimeout(() => {
+          const q = text.toLowerCase();
+
+          // 1. Detect Destination Country (Priority Checked)
+          let targetCountry = null;
+          if (q.includes('australia') || q.includes('aussie') || q.includes('subclass 500') || q.includes('melbourne') || q.includes('sydney') || q.includes('perth') || q.includes('brisbane') || q.includes('adelaide')) {
+            targetCountry = 'Australia';
+          } else if (q.includes('canada') || q.includes('toronto') || q.includes('vancouver') || q.includes('sds') || q.includes('pgwp') || q.includes('gic') || q.includes('ontario') || q.includes('alberta')) {
+            targetCountry = 'Canada';
+          } else if (q.includes('uk') || q.includes('united kingdom') || q.includes('london') || q.includes('cas') || q.includes('graduate route') || q.includes('birmingham') || q.includes('manchester')) {
+            targetCountry = 'UK';
+          } else if (q.includes('usa') || q.includes('united states') || q.includes('america') || q.includes('f1') || q.includes('opt') || q.includes('stem') || q.includes('i20')) {
+            targetCountry = 'USA';
+          } else if (q.includes('germany') || q.includes('aps') || q.includes('blocked account') || q.includes('berlin') || q.includes('munich') || q.includes('frankfurt')) {
+            targetCountry = 'Germany';
+          } else if (q.includes('ireland') || q.includes('dublin') || q.includes('france') || q.includes('italy') || q.includes('schengen') || q.includes('europe')) {
+            targetCountry = 'Europe';
+          } else if (q.includes('new zealand') || q.includes('nz') || q.includes('auckland')) {
+            targetCountry = 'New Zealand';
+          } else if (q.includes('singapore')) {
+            targetCountry = 'Singapore';
+          } else if (q.includes('mauritius')) {
+            targetCountry = 'Mauritius';
+          } else if (q.includes('russia') || q.includes('mbbs')) {
+            targetCountry = 'Russia';
+          }
+
+          // 2. Detect Education Level & Gaps
+          let is12th = q.includes('12th') || q.includes('10+2') || q.includes('intermediate') || q.includes('senior secondary') || q.includes('high school');
+          let isGraduation = q.includes('graduat') || q.includes('bachelor') || q.includes('degree') || q.includes('b.tech') || q.includes('btech') || q.includes('b.com') || q.includes('bcom') || q.includes('b.sc') || q.includes('bsc') || q.includes('bba') || q.includes('bca') || q.includes('ba ');
+          let isMasters = q.includes('master') || q.includes('pg ') || q.includes('postgrad') || q.includes('m.sc') || q.includes('msc') || q.includes('mba') || q.includes('m.tech') || q.includes('mtech');
+
+          let yearMatch = q.match(/201[5-9]|202[0-6]/);
+          let passoutYear = yearMatch ? parseInt(yearMatch[0]) : null;
+          let currentYear = 2026;
+          let gapYears = passoutYear ? (currentYear - passoutYear) : null;
+
+          let isHBSE = q.includes('haryana board') || q.includes('hbse') || q.includes('bseh');
+          let isPSEB = q.includes('punjab board') || q.includes('pseb');
+          let isCBSE = q.includes('cbse');
+          let isICSE = q.includes('icse') || q.includes('isc');
+          let isNIOS = q.includes('nios') || q.includes('open board');
+
+          let pctMatch = q.match(/(\d{2}(?:\.\d+)?)\s*%/);
+          let percentage = pctMatch ? parseFloat(pctMatch[1]) : null;
+
+          let title = "Bhagwati Overseas Professional Profile Evaluation:";
+          let bullets = [];
+
+          if (targetCountry === 'Australia') {
+            title = "Australia Subclass 500 Visa Assessment (Grounded & Realistic):";
+            let verdict = "Challenging — High Visa Scrutiny (Requires Strategic Pathway)";
+            let hurdles = [];
+            let solutions = [];
+
+            if (isHBSE || isPSEB) {
+              hurdles.push("State Board Scrutiny: Australian Department of Home Affairs and Level 1 universities place Haryana (HBSE) and Punjab (PSEB) state boards under rigorous Genuine Student (GS) verification.");
+            }
+            if (gapYears && gapYears >= 2 && (is12th || !isGraduation)) {
+              hurdles.push(`Academic Gap (${gapYears} Years since ${passoutYear}): Direct entry into Australian Bachelor's with a 2+ year 12th gap is almost universally rejected by Level 1 universities without continuous accredited diploma studies.`);
+            } else if (gapYears && gapYears >= 4 && isGraduation) {
+              hurdles.push(`Post-Graduation Gap (${gapYears} Years): Requires solid ITR, salary credit in bank accounts, and relevant work experience letters.`);
+            }
+            hurdles.push("PTE / English Score: Minimum PTE 60-64+ overall (no communicative skill below 58) is practically required for smooth Level 1/2 COE issuance.");
+            hurdles.push("Financial Evidence: Must demonstrate ₹28–₹32 Lakhs in 3-month-old verifiable funds held by parents/grandparents + annual family income proof of ₹8–₹12+ Lakhs/year.");
+
+            if (gapYears && gapYears >= 2 && is12th) {
+              solutions.push("Accredited D2D Pathway: Apply for a Diploma-to-Degree (1+2 years) package at a Level 2 Regional DLI (e.g. Adelaide, Perth, Geelong) which accepts justified gaps.");
+              solutions.push("Alternative Destination: If Australia rejection risk is too high, UK or Germany offers direct Bachelor's entry for 70%+ HBSE/CBSE with fast-track visa issuance.");
+            } else {
+              solutions.push("Apply directly to Level 1/2 Regional Universities with high GS clearance rates and regional post-study work rights (up to 3-4 years).");
+            }
+
+            bullets = [
+              `Direct Profile Verdict: ${verdict}`,
+              ...hurdles,
+              `Actionable Recommendation: ${solutions.join(' ')}`
+            ];
+          } else if (targetCountry === 'UK') {
+            title = "United Kingdom (UK) Study Visa Assessment:";
+            let verdict = (percentage && percentage >= 65) ? "Strong to Moderate Eligibility" : "Moderate (Subject to English Proof)";
+            let hurdles = [];
+            let solutions = [];
+
+            if (is12th && (isHBSE || isPSEB)) {
+              hurdles.push("English Waiver (MOI): UK universities require 70%-75%+ in 12th English for HBSE/PSEB for IELTS waiver; otherwise, IELTS 6.0 (5.5 min) or PTE 59+ is required.");
+            } else if (is12th && (isCBSE || isICSE)) {
+              hurdles.push("English Waiver (MOI): 65%-70%+ in Class 12th English (CBSE/ICSE) gets full IELTS waiver across several top UK partner universities.");
+            }
+
+            if (gapYears && gapYears > 2 && is12th) {
+              hurdles.push(`12th Academic Gap (${gapYears} Years): Acceptable up to 2-3 years; beyond that, diploma proof or computer course certification is required for CAS issuance.`);
+            } else if (gapYears && gapYears <= 8 && isGraduation) {
+              hurdles.push(`Graduation Gap (${gapYears} Years): Fully accepted with job offer letters, salary slips, and bank account credit proof.`);
+            }
+
+            hurdles.push("28-Day Maintenance Funds: Must hold £13,365 (London) or £10,224 (Outside London) in savings bank for 28 consecutive days before visa appointment.");
+            hurdles.push("Credibility / Pre-CAS Interview: You must pass a 15-minute university credibility interview explaining course choice and modules.");
+
+            solutions.push("Fast Offer Letters (48-72 hrs): Direct application with institutional fee waiver + dedicated CAS interview mock preparation in Ladwa.");
+
+            bullets = [
+              `Direct Profile Verdict: ${verdict}`,
+              ...hurdles,
+              `Actionable Recommendation: ${solutions.join(' ')}`
+            ];
+          } else if (targetCountry === 'Canada') {
+            title = "Canada Study Visa Assessment (Post-Cap Guidelines):";
+            bullets = [
+              "Direct Profile Verdict: Moderate (Strict Cap & Public DLI Verification Needed)",
+              "IRCC Visa Caps & PAL: Every Canadian study permit requires a Provincial Attestation Letter (PAL) allocated to approved public colleges/universities.",
+              "Language Benchmark: Minimum IELTS Academic 6.0 in each band or PTE Academic 60+ for SDS processing.",
+              "Mandatory GIC & 1st Year Fees: Full 1st year tuition fee + $20,635 CAD GIC in an approved Canadian bank (Scotiabank/CIBC/ICICI).",
+              "Actionable Recommendation: Target high-in-demand STEM, Healthcare, or Business programs at public colleges in Ontario, Alberta, or British Columbia with provincial nomination pathways."
+            ];
+          } else if (targetCountry === 'Germany' || targetCountry === 'Europe') {
+            title = "Germany & Europe Public University Pathway:";
+            bullets = [
+              "Direct Profile Verdict: Strong for Public Universities (Cost-Effective & High PR Value)",
+              "Mandatory APS Certificate: Academic Evaluation Centre (APS) certificate is compulsory for all Indian Bachelor's/Master's applicants before visa booking.",
+              "Blocked Account (€11,904/year): Compulsory deposit in Expatrio/Coracle/Fintiba to cover monthly living expenses (€992/month).",
+              "Language Cutoffs: IELTS 6.5 (or Duolingo 115+) for English-taught Master's degrees at public universities.",
+              "Actionable Recommendation: German public universities charge zero tuition fees. 18-month post-study Job Seeker Visa with direct EU Blue Card pathway."
+            ];
+          } else if (q.includes('spouse') || q.includes('dependent') || q.includes('marriage')) {
+            title = "Spouse & Dependent Visa Regulations (Grounded Analysis):";
+            bullets = [
+              "Direct Profile Verdict: Feasible with Master's/Ph.D. Enrolment (Not applicable for Bachelor's/Diplomas in Canada & UK)",
+              "Australia: Full unrestricted work rights for spouse if primary applicant is in Master's (Coursework or Research) or Doctoral degree on Subclass 500.",
+              "Canada: Spouse Open Work Permit (SOWP) strictly restricted to spouses of Master's and Doctoral students at public universities.",
+              "UK: Dependents strictly allowed ONLY for postgraduate research programs (Ph.D. or Master's by Research).",
+              "Actionable Recommendation: Walk into Bhagwati Overseas Ladwa office with marriage registration, joint account statements, and passport proofs for a complete spouse audit."
+            ];
+          } else if (q.includes('refusal') || q.includes('rejected') || q.includes('rejection')) {
+            title = "Visa Refusal Recovery Strategy:";
+            bullets = [
+              "Direct Profile Verdict: Highly Solvable with Justified SOP & Document Rectification",
+              "Root-Cause Audit: We analyze your official embassy refusal letter or order GCMS notes (for Canada) to identify the exact rejection grounds (GTE/GS, finances, home ties, or documentation).",
+              "Addressing Section 214(b) / GST: Draft a compelling, evidence-backed Statement of Purpose addressing why your course progression is genuine and logically viable.",
+              "Actionable Recommendation: Bring your original refusal letter and marksheets to our Ladwa office for a transparent, zero-charge profile reconstruct."
+            ];
+          } else {
+            let boardText = isHBSE ? "Haryana Board (HBSE)" : isPSEB ? "Punjab Board (PSEB)" : isCBSE ? "CBSE" : isICSE ? "ICSE" : "your education board";
+            let gapText = gapYears ? `${gapYears}-year gap (Passout: ${passoutYear})` : "your academic timeline";
+            let pctText = percentage ? `${percentage}% marks` : "your academic percentage";
+
+            bullets = [
+              `Profile Overview: Analyzing ${pctText} from ${boardText} with ${gapText}.`,
+              "Honest Country Matching: Different countries have radically different scrutiny levels for state boards and academic gaps (e.g. UK/Germany accept gaps up to 5-8 years; Australia requires strict GS & accredited pathways for gaps > 2 years).",
+              "Score & Fund Verification: We verify whether you need IELTS, PTE, or qualify for Medium of Instruction (MOI) fee waivers + assist with legitimate bank funds verification.",
+              "Actionable Recommendation: Submit your details below or visit our Ladwa head office (Behind Bus Stand) for an authentic, 1-on-1 document audit."
+            ];
+          }
+
+          const structuredHtml = formatResponseToHtml(title, bullets);
+
+          const aiHtml = `
+            <div class="chat-bubble-wrapper ai-msg animate-fade-in">
+              <div class="chat-bubble-content">
+                ${structuredHtml}
+                <button class="btn btn-orange btn-sm chat-cta-btn" onclick="closeAIChatModal(); openAssessmentModal();" style="margin-top: 0.75rem; width: 100%;">
+                  <span>Book Free Profile Assessment</span>
+                </button>
+                <span class="chat-bubble-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+            </div>
+          `;
+          msgBody.insertAdjacentHTML('beforeend', aiHtml);
+          msgBody.scrollTop = msgBody.scrollHeight;
+        }, 400);
+      }
+    </script>
+
+    <!-- Mount React Application -->
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
