@@ -1438,10 +1438,15 @@
       // Initial loading
       window.onload = function() {
         // Inject Promos into HomePage
-        document.getElementById('home-promo-coach-placeholder').innerHTML = getCoachHTML();
+        const placeholder = document.getElementById('home-promo-coach-placeholder');
+        if (placeholder && typeof getCoachHTML === 'function') {
+          placeholder.innerHTML = getCoachHTML();
+        }
         
         // Fetch news live for home page
-        fetchRadarNews(sheetId);
+        if (typeof fetchRadarNews === 'function') {
+          fetchRadarNews(sheetId);
+        }
       }
 
       /* Lead Capture Modal Functions */
@@ -1614,7 +1619,7 @@
             </div>
             <div>
               <h3 class="ai-name">Bhagwati AI Counselor</h3>
-              <p class="ai-status">Online • Study Abroad & Visa Specialist</p>
+              <p class="ai-status">Online • Senior International Admissions Director</p>
             </div>
           </div>
           <button class="ai-close-btn" onclick="closeAIChatModal()" aria-label="Close Chat">&times;</button>
@@ -1623,13 +1628,21 @@
         <div class="ai-chat-body" id="ai-chat-msg-body">
           <div class="ai-notice-box">
             <i data-lucide="shield-check" style="width: 16px; height: 16px; color: var(--orange-bright);"></i>
-            <span>Real-time visa guidelines for UK, Australia, Canada, Germany & USA.</span>
+            <span>Honest, unvarnished visa evaluation (15+ yrs Haryana & Punjab experience).</span>
           </div>
 
           <div class="chat-bubble-wrapper ai-msg">
             <div class="chat-bubble-content">
               <div class="chat-structured-content">
-                <p class="chat-p-line">Hello! I am your AI Study Abroad Counselor. Tell me about your academic background (10+2 / Degree percentage, board, academic gap, IELTS/PTE score, or preferred country) and I will provide you with a sharp, realistic visa evaluation.</p>
+                <p class="chat-p-line">Bhagwati Overseas Senior Visa Director Engine</p>
+                <div class="chat-bullet-row">
+                  <span class="chat-bullet-dot"></span>
+                  <div><strong class="chat-bullet-label">Role & Persona:</strong> <span class="chat-bullet-body">Senior International Admissions & Visa Director at Bhagwati Overseas (Ladwa, Kurukshetra) with 15+ years evaluating Haryana & Punjab student profiles.</span></div>
+                </div>
+                <div class="chat-bullet-row">
+                  <span class="chat-bullet-dot"></span>
+                  <div><strong class="chat-bullet-label">Unvarnished Ground Reality:</strong> <span class="chat-bullet-body">Share your 10+2 / Degree passing year, percentage, board (HBSE/PSEB/CBSE/ICSE), PTE/IELTS score, and target country for an honest, strict visa evaluation (NO hype, NO unprompted cost lists).</span></div>
+                </div>
               </div>
               <span class="chat-bubble-time">Just now</span>
             </div>
@@ -1637,18 +1650,19 @@
         </div>
 
         <div class="ai-quick-prompts">
-          <span class="prompts-label">Quick Profile Queries:</span>
+          <span class="prompts-label">Quick Profile & Fee Queries:</span>
           <div class="prompts-scroll">
-            <button class="prompt-chip" onclick="handleQuickPrompt('Can I apply to UK with 3-year gap & HBSE 12th?')">UK with 3-year gap & HBSE 12th?</button>
-            <button class="prompt-chip" onclick="handleQuickPrompt('Australia PTE cutoff & funds 2026')">Australia PTE & funds 2026</button>
-            <button class="prompt-chip" onclick="handleQuickPrompt('Germany APS & Blocked Account setup')">Germany APS & Blocked Account</button>
-            <button class="prompt-chip" onclick="handleQuickPrompt('Canada SDS vs Non-SDS & PGWP rules')">Canada SDS & PGWP rules</button>
-            <button class="prompt-chip" onclick="handleQuickPrompt('Spouse visa eligibility for Master\\'s degrees')">Spouse visa options</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('12th HBSE 2023 75% Non-Med for Australia?')">12th HBSE 2023 for Australia?</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('12th CBSE 2024 80% for UK with IELTS waiver?')">12th CBSE 80% for UK MOI?</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Graduation with 5-year gap for Canada Master\\'s?')">5-Year Gap for Canada Master's</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Australia Subclass 500 Spouse Visa eligibility?')">Australia Spouse Visa Eligibility</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('how much cost for latvia study visa for bachelors')">Latvia Bachelor's Cost Breakdown</button>
+            <button class="prompt-chip" onclick="handleQuickPrompt('Canada SDS 1st Year Tuition + GIC Breakdown')">Canada Tuition + GIC Breakdown</button>
           </div>
         </div>
 
         <form class="ai-chat-footer" onsubmit="handleAIChatSubmit(event)">
-          <input type="text" id="ai-chat-input-field" class="ai-chat-input" placeholder="Ask about academic gaps, PTE/IELTS cutoffs, fees, funds..." />
+          <input type="text" id="ai-chat-input-field" class="ai-chat-input" placeholder="e.g. 12th HBSE 2023 75% Non-Med for Australia?" />
           <button type="submit" class="ai-send-btn">
             <i data-lucide="send" style="width: 16px; height: 16px;"></i>
           </button>
@@ -1724,165 +1738,55 @@
           </div>
         `;
         msgBody.insertAdjacentHTML('beforeend', userHtml);
+
+        // Add Thinking visual card
+        const thinkingId = 'thinking-' + Date.now();
+        const thinkingHtml = `
+          <div id="${thinkingId}" class="chat-bubble-wrapper ai-msg animate-fade-in">
+            <div class="chat-bubble-content ai-thinking-card">
+              <div class="ai-thinking-header">
+                <i data-lucide="sparkles" style="width: 14px; height: 14px; color: var(--orange-bright);"></i>
+                <span class="ai-thinking-title">Senior Director Evaluating...</span>
+              </div>
+              <p class="ai-thinking-step" id="${thinkingId}-step">Analyzing academic gap, education board & visa criteria...</p>
+              <div class="typing-indicator-box">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+          </div>
+        `;
+        msgBody.insertAdjacentHTML('beforeend', thinkingHtml);
+        if (window.lucide) window.lucide.createIcons();
         msgBody.scrollTop = msgBody.scrollHeight;
 
-        // Generate realistic grounded response using Dynamic Country & Profile Engine
         setTimeout(() => {
-          const q = text.toLowerCase();
+          const stepEl = document.getElementById(`${thinkingId}-step`);
+          if (stepEl) stepEl.innerText = "Evaluating Genuine Student (GS) compliance & embassy rules...";
+        }, 850);
 
-          // 1. Detect Destination Country (Priority Checked)
-          let targetCountry = null;
-          if (q.includes('australia') || q.includes('aussie') || q.includes('subclass 500') || q.includes('melbourne') || q.includes('sydney') || q.includes('perth') || q.includes('brisbane') || q.includes('adelaide')) {
-            targetCountry = 'Australia';
-          } else if (q.includes('canada') || q.includes('toronto') || q.includes('vancouver') || q.includes('sds') || q.includes('pgwp') || q.includes('gic') || q.includes('ontario') || q.includes('alberta')) {
-            targetCountry = 'Canada';
-          } else if (q.includes('uk') || q.includes('united kingdom') || q.includes('london') || q.includes('cas') || q.includes('graduate route') || q.includes('birmingham') || q.includes('manchester')) {
-            targetCountry = 'UK';
-          } else if (q.includes('usa') || q.includes('united states') || q.includes('america') || q.includes('f1') || q.includes('opt') || q.includes('stem') || q.includes('i20')) {
-            targetCountry = 'USA';
-          } else if (q.includes('germany') || q.includes('aps') || q.includes('blocked account') || q.includes('berlin') || q.includes('munich') || q.includes('frankfurt')) {
-            targetCountry = 'Germany';
-          } else if (q.includes('ireland') || q.includes('dublin') || q.includes('france') || q.includes('italy') || q.includes('schengen') || q.includes('europe')) {
-            targetCountry = 'Europe';
-          } else if (q.includes('new zealand') || q.includes('nz') || q.includes('auckland')) {
-            targetCountry = 'New Zealand';
-          } else if (q.includes('singapore')) {
-            targetCountry = 'Singapore';
-          } else if (q.includes('mauritius')) {
-            targetCountry = 'Mauritius';
-          } else if (q.includes('russia') || q.includes('mbbs')) {
-            targetCountry = 'Russia';
-          }
+        setTimeout(() => {
+          const stepEl = document.getElementById(`${thinkingId}-step`);
+          if (stepEl) stepEl.innerText = "Synthesizing unvarnished ground reality & strategic alternatives...";
+        }, 1650);
 
-          // 2. Detect Education Level & Gaps
-          let is12th = q.includes('12th') || q.includes('10+2') || q.includes('intermediate') || q.includes('senior secondary') || q.includes('high school');
-          let isGraduation = q.includes('graduat') || q.includes('bachelor') || q.includes('degree') || q.includes('b.tech') || q.includes('btech') || q.includes('b.com') || q.includes('bcom') || q.includes('b.sc') || q.includes('bsc') || q.includes('bba') || q.includes('bca') || q.includes('ba ');
-          let isMasters = q.includes('master') || q.includes('pg ') || q.includes('postgrad') || q.includes('m.sc') || q.includes('msc') || q.includes('mba') || q.includes('m.tech') || q.includes('mtech');
+        // Final expert answer after 2400ms thinking delay
+        // Call Backend API Route /api/chat with full query
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: [{ role: 'user', text: text }] })
+        })
+        .then(res => res.json())
+        .then(data => {
+          const thinkingEl = document.getElementById(thinkingId);
+          if (thinkingEl) thinkingEl.remove();
 
-          let yearMatch = q.match(/201[5-9]|202[0-6]/);
-          let passoutYear = yearMatch ? parseInt(yearMatch[0]) : null;
-          let currentYear = 2026;
-          let gapYears = passoutYear ? (currentYear - passoutYear) : null;
-
-          let isHBSE = q.includes('haryana board') || q.includes('hbse') || q.includes('bseh');
-          let isPSEB = q.includes('punjab board') || q.includes('pseb');
-          let isCBSE = q.includes('cbse');
-          let isICSE = q.includes('icse') || q.includes('isc');
-          let isNIOS = q.includes('nios') || q.includes('open board');
-
-          let pctMatch = q.match(/(\d{2}(?:\.\d+)?)\s*%/);
-          let percentage = pctMatch ? parseFloat(pctMatch[1]) : null;
-
-          let title = "Bhagwati Overseas Professional Profile Evaluation:";
-          let bullets = [];
-
-          if (targetCountry === 'Australia') {
-            title = "Australia Subclass 500 Visa Assessment (Grounded & Realistic):";
-            let verdict = "Challenging — High Visa Scrutiny (Requires Strategic Pathway)";
-            let hurdles = [];
-            let solutions = [];
-
-            if (isHBSE || isPSEB) {
-              hurdles.push("State Board Scrutiny: Australian Department of Home Affairs and Level 1 universities place Haryana (HBSE) and Punjab (PSEB) state boards under rigorous Genuine Student (GS) verification.");
-            }
-            if (gapYears && gapYears >= 2 && (is12th || !isGraduation)) {
-              hurdles.push(`Academic Gap (${gapYears} Years since ${passoutYear}): Direct entry into Australian Bachelor's with a 2+ year 12th gap is almost universally rejected by Level 1 universities without continuous accredited diploma studies.`);
-            } else if (gapYears && gapYears >= 4 && isGraduation) {
-              hurdles.push(`Post-Graduation Gap (${gapYears} Years): Requires solid ITR, salary credit in bank accounts, and relevant work experience letters.`);
-            }
-            hurdles.push("PTE / English Score: Minimum PTE 60-64+ overall (no communicative skill below 58) is practically required for smooth Level 1/2 COE issuance.");
-            hurdles.push("Financial Evidence: Must demonstrate ₹28–₹32 Lakhs in 3-month-old verifiable funds held by parents/grandparents + annual family income proof of ₹8–₹12+ Lakhs/year.");
-
-            if (gapYears && gapYears >= 2 && is12th) {
-              solutions.push("Accredited D2D Pathway: Apply for a Diploma-to-Degree (1+2 years) package at a Level 2 Regional DLI (e.g. Adelaide, Perth, Geelong) which accepts justified gaps.");
-              solutions.push("Alternative Destination: If Australia rejection risk is too high, UK or Germany offers direct Bachelor's entry for 70%+ HBSE/CBSE with fast-track visa issuance.");
-            } else {
-              solutions.push("Apply directly to Level 1/2 Regional Universities with high GS clearance rates and regional post-study work rights (up to 3-4 years).");
-            }
-
-            bullets = [
-              `Direct Profile Verdict: ${verdict}`,
-              ...hurdles,
-              `Actionable Recommendation: ${solutions.join(' ')}`
-            ];
-          } else if (targetCountry === 'UK') {
-            title = "United Kingdom (UK) Study Visa Assessment:";
-            let verdict = (percentage && percentage >= 65) ? "Strong to Moderate Eligibility" : "Moderate (Subject to English Proof)";
-            let hurdles = [];
-            let solutions = [];
-
-            if (is12th && (isHBSE || isPSEB)) {
-              hurdles.push("English Waiver (MOI): UK universities require 70%-75%+ in 12th English for HBSE/PSEB for IELTS waiver; otherwise, IELTS 6.0 (5.5 min) or PTE 59+ is required.");
-            } else if (is12th && (isCBSE || isICSE)) {
-              hurdles.push("English Waiver (MOI): 65%-70%+ in Class 12th English (CBSE/ICSE) gets full IELTS waiver across several top UK partner universities.");
-            }
-
-            if (gapYears && gapYears > 2 && is12th) {
-              hurdles.push(`12th Academic Gap (${gapYears} Years): Acceptable up to 2-3 years; beyond that, diploma proof or computer course certification is required for CAS issuance.`);
-            } else if (gapYears && gapYears <= 8 && isGraduation) {
-              hurdles.push(`Graduation Gap (${gapYears} Years): Fully accepted with job offer letters, salary slips, and bank account credit proof.`);
-            }
-
-            hurdles.push("28-Day Maintenance Funds: Must hold £13,365 (London) or £10,224 (Outside London) in savings bank for 28 consecutive days before visa appointment.");
-            hurdles.push("Credibility / Pre-CAS Interview: You must pass a 15-minute university credibility interview explaining course choice and modules.");
-
-            solutions.push("Fast Offer Letters (48-72 hrs): Direct application with institutional fee waiver + dedicated CAS interview mock preparation in Ladwa.");
-
-            bullets = [
-              `Direct Profile Verdict: ${verdict}`,
-              ...hurdles,
-              `Actionable Recommendation: ${solutions.join(' ')}`
-            ];
-          } else if (targetCountry === 'Canada') {
-            title = "Canada Study Visa Assessment (Post-Cap Guidelines):";
-            bullets = [
-              "Direct Profile Verdict: Moderate (Strict Cap & Public DLI Verification Needed)",
-              "IRCC Visa Caps & PAL: Every Canadian study permit requires a Provincial Attestation Letter (PAL) allocated to approved public colleges/universities.",
-              "Language Benchmark: Minimum IELTS Academic 6.0 in each band or PTE Academic 60+ for SDS processing.",
-              "Mandatory GIC & 1st Year Fees: Full 1st year tuition fee + $20,635 CAD GIC in an approved Canadian bank (Scotiabank/CIBC/ICICI).",
-              "Actionable Recommendation: Target high-in-demand STEM, Healthcare, or Business programs at public colleges in Ontario, Alberta, or British Columbia with provincial nomination pathways."
-            ];
-          } else if (targetCountry === 'Germany' || targetCountry === 'Europe') {
-            title = "Germany & Europe Public University Pathway:";
-            bullets = [
-              "Direct Profile Verdict: Strong for Public Universities (Cost-Effective & High PR Value)",
-              "Mandatory APS Certificate: Academic Evaluation Centre (APS) certificate is compulsory for all Indian Bachelor's/Master's applicants before visa booking.",
-              "Blocked Account (€11,904/year): Compulsory deposit in Expatrio/Coracle/Fintiba to cover monthly living expenses (€992/month).",
-              "Language Cutoffs: IELTS 6.5 (or Duolingo 115+) for English-taught Master's degrees at public universities.",
-              "Actionable Recommendation: German public universities charge zero tuition fees. 18-month post-study Job Seeker Visa with direct EU Blue Card pathway."
-            ];
-          } else if (q.includes('spouse') || q.includes('dependent') || q.includes('marriage')) {
-            title = "Spouse & Dependent Visa Regulations (Grounded Analysis):";
-            bullets = [
-              "Direct Profile Verdict: Feasible with Master's/Ph.D. Enrolment (Not applicable for Bachelor's/Diplomas in Canada & UK)",
-              "Australia: Full unrestricted work rights for spouse if primary applicant is in Master's (Coursework or Research) or Doctoral degree on Subclass 500.",
-              "Canada: Spouse Open Work Permit (SOWP) strictly restricted to spouses of Master's and Doctoral students at public universities.",
-              "UK: Dependents strictly allowed ONLY for postgraduate research programs (Ph.D. or Master's by Research).",
-              "Actionable Recommendation: Walk into Bhagwati Overseas Ladwa office with marriage registration, joint account statements, and passport proofs for a complete spouse audit."
-            ];
-          } else if (q.includes('refusal') || q.includes('rejected') || q.includes('rejection')) {
-            title = "Visa Refusal Recovery Strategy:";
-            bullets = [
-              "Direct Profile Verdict: Highly Solvable with Justified SOP & Document Rectification",
-              "Root-Cause Audit: We analyze your official embassy refusal letter or order GCMS notes (for Canada) to identify the exact rejection grounds (GTE/GS, finances, home ties, or documentation).",
-              "Addressing Section 214(b) / GST: Draft a compelling, evidence-backed Statement of Purpose addressing why your course progression is genuine and logically viable.",
-              "Actionable Recommendation: Bring your original refusal letter and marksheets to our Ladwa office for a transparent, zero-charge profile reconstruct."
-            ];
-          } else {
-            let boardText = isHBSE ? "Haryana Board (HBSE)" : isPSEB ? "Punjab Board (PSEB)" : isCBSE ? "CBSE" : isICSE ? "ICSE" : "your education board";
-            let gapText = gapYears ? `${gapYears}-year gap (Passout: ${passoutYear})` : "your academic timeline";
-            let pctText = percentage ? `${percentage}% marks` : "your academic percentage";
-
-            bullets = [
-              `Profile Overview: Analyzing ${pctText} from ${boardText} with ${gapText}.`,
-              "Honest Country Matching: Different countries have radically different scrutiny levels for state boards and academic gaps (e.g. UK/Germany accept gaps up to 5-8 years; Australia requires strict GS & accredited pathways for gaps > 2 years).",
-              "Score & Fund Verification: We verify whether you need IELTS, PTE, or qualify for Medium of Instruction (MOI) fee waivers + assist with legitimate bank funds verification.",
-              "Actionable Recommendation: Submit your details below or visit our Ladwa head office (Behind Bus Stand) for an authentic, 1-on-1 document audit."
-            ];
-          }
+          let title = data.title || "Bhagwati Overseas Senior Visa Director Engine:";
+          let bullets = data.bullets || (data.text ? data.text.split('\n').filter(l => l.trim().length > 0) : []);
 
           const structuredHtml = formatResponseToHtml(title, bullets);
-
           const aiHtml = `
             <div class="chat-bubble-wrapper ai-msg animate-fade-in">
               <div class="chat-bubble-content">
@@ -1896,7 +1800,33 @@
           `;
           msgBody.insertAdjacentHTML('beforeend', aiHtml);
           msgBody.scrollTop = msgBody.scrollHeight;
-        }, 400);
+        })
+        .catch(err => {
+          console.warn("Error calling /api/chat:", err);
+          const thinkingEl = document.getElementById(thinkingId);
+          if (thinkingEl) thinkingEl.remove();
+
+          let title = "Bhagwati Overseas AI Counselor:";
+          let bullets = [
+            "Network Notice: Unable to reach admissions AI server.",
+            "Direct Assistance: Please visit Bhagwati Overseas Ladwa office (Above Nirula Clinic, Behind Bus Stand, Ladwa) or click Book Free Assessment."
+          ];
+
+          const structuredHtml = formatResponseToHtml(title, bullets);
+          const aiHtml = `
+            <div class="chat-bubble-wrapper ai-msg animate-fade-in">
+              <div class="chat-bubble-content">
+                ${structuredHtml}
+                <button class="btn btn-orange btn-sm chat-cta-btn" onclick="closeAIChatModal(); openAssessmentModal();" style="margin-top: 0.75rem; width: 100%;">
+                  <span>Book Free Profile Assessment</span>
+                </button>
+                <span class="chat-bubble-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+            </div>
+          `;
+          msgBody.insertAdjacentHTML('beforeend', aiHtml);
+          msgBody.scrollTop = msgBody.scrollHeight;
+        });
       }
     </script>
 

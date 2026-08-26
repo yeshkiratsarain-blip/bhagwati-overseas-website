@@ -2482,7 +2482,7 @@ button {
   display: flex;
   gap: 4px;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.35rem 0 0 0;
 }
 
 .typing-indicator-box .dot {
@@ -2499,6 +2499,45 @@ button {
 @keyframes typingBounce {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
+}
+
+.ai-thinking-card {
+  background: linear-gradient(135deg, #fffcf9 0%, #fff7ed 100%) !important;
+  border: 1px solid rgba(249, 115, 22, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.08) !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.ai-thinking-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.ai-thinking-sparkle {
+  color: var(--orange-bright);
+  animation: pulseSparkle 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseSparkle {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.25); opacity: 1; }
+}
+
+.ai-thinking-title {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--navy-deep);
+  letter-spacing: 0.01em;
+}
+
+.ai-thinking-step {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.25rem 0;
+  font-style: italic;
+  line-height: 1.4;
 }
 
 .ai-quick-prompts {
