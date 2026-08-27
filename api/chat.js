@@ -70,6 +70,74 @@ function retrieveGroundTruthResponse(userQuery) {
     return escalationResponse;
   }
 
+  // BRANCH A: MANDATORY LIVING COST & EXPENSE LOOKUP RULES
+  const isLivingCostQuery = q.includes('living') || q.includes('living cost') || q.includes('living expense') || q.includes('maintenance') || q.includes('blocked account') || q.includes('gic') || q.includes('show money');
+
+  if (isLivingCostQuery) {
+    if (q.includes('australia')) {
+      return {
+        title: "Australia Subclass 500 Living Cost Requirement (2026 Ground-Truth):",
+        bullets: [
+          "DHA Living Baseline: $29,710 AUD / year (~₹16.34 Lakhs INR) mandatory living maintenance norm for single applicant.",
+          "Show Money Formula: 1 Year Tuition + $29,710 AUD Living + $2,000 AUD Travel = ₹35 Lakhs – ₹48 Lakhs INR verifiable liquid bank balance.",
+          "OSHC Health Cover: Compulsory OSHC health cover of $600 – $800 / year (~₹33,000 INR/year).",
+          cta
+        ],
+        suggestAssessment: true
+      };
+    }
+
+    if (q.includes('germany')) {
+      return {
+        title: "Germany Blocked Account & Living Cost Norm (2026 Ground-Truth):",
+        bullets: [
+          "Mandatory Blocked Account (Sperrkonto): €11,904 / year (~₹10.71 Lakhs INR) deposited in Expatrio or Fintiba under § 16b AufenthG.",
+          "Monthly Withdrawal Limit: Allows maximum withdrawal of €992 / month (~₹89,280 INR/month) for living expenses.",
+          "Public Health Insurance: Mandatory TK/AOK public student health insurance of €120 – €140 / month (~₹10,800 – ₹12,600 INR/month).",
+          cta
+        ],
+        suggestAssessment: true
+      };
+    }
+
+    if (q.includes('canada')) {
+      return {
+        title: "Canada GIC & Living Deposit Requirement (2026 Ground-Truth):",
+        bullets: [
+          "Mandatory GIC Deposit: $22,895 CAD (~₹13.96 Lakhs INR) deposited in Scotiabank/CIBC for single applicants outside Quebec ($24,617 CAD in Quebec).",
+          "Show Money Formula: 1st Year Tuition + $22,895 CAD GIC = ₹25 Lakhs – ₹38 Lakhs INR total verifiable liquid funds.",
+          cta
+        ],
+        suggestAssessment: true
+      };
+    }
+
+    if (q.includes('uk') || q.includes('united kingdom')) {
+      return {
+        title: "UK Student Route Living Maintenance Norm (2026 Ground-Truth):",
+        bullets: [
+          "Inside London Living Norm: £1,334 / month for up to 9 months (£12,006 total / ~₹12.72 Lakhs INR).",
+          "Outside London Living Norm: £1,023 / month for up to 9 months (£9,207 total / ~₹9.76 Lakhs INR).",
+          "IHS Healthcare Surcharge: Mandatory Immigration Health Surcharge (IHS) of £776 / year (~₹82,250 INR/year).",
+          cta
+        ],
+        suggestAssessment: true
+      };
+    }
+
+    if (q.includes('latvia')) {
+      return {
+        title: "Latvia Living Maintenance & Show Money (2026 Ground-Truth):",
+        bullets: [
+          "Living Maintenance Norm: €500 – €650 / month (~₹45,000 – ₹58,500 INR/month).",
+          "Bank Show Money: Minimum €6,000 liquid balance (~₹5.50 Lakhs – ₹6.50 Lakhs INR) in student or parent account.",
+          cta
+        ],
+        suggestAssessment: true
+      };
+    }
+  }
+
   // BRANCH A: LANGUAGE BENCHMARK QUERIES (PTE / IELTS / TOEFL) - SINGLE COUNTRY ISOLATION
   const isLanguageQuery = q.includes('pte') || q.includes('ielts') || q.includes('toefl') || q.includes('language') || q.includes('english score') || q.includes('cutoff');
   
