@@ -373,7 +373,7 @@ export async function handleApiChatRequest(reqBody) {
   const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.OPENAI_API_KEY;
 
   if (geminiKey && geminiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
-    const modelCandidates = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash'];
+    const modelCandidates = ['gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'];
 
     const formattedContents = messages.length > 0 ? messages.map(m => ({
       role: (m.sender === 'user' || m.role === 'user') ? 'user' : 'model',
@@ -385,7 +385,10 @@ export async function handleApiChatRequest(reqBody) {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
         const response = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiKey
+          },
           body: JSON.stringify({
             contents: formattedContents,
             system_instruction: { parts: [{ text: RAG_GROUND_TRUTH_SYSTEM_PROMPT }] },
@@ -423,4 +426,38 @@ export async function handleApiChatRequest(reqBody) {
     bullets: groundTruthResult.bullets,
     suggestAssessment: groundTruthResult.suggestAssessment
   };
+}
+
+// Vercel Serverless Function Handler (/api/chat)
+export default async function handler(req, res) {
+  // Enable CORS Headers for Vercel Serverless Environment
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, x-goog-api-key'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  try {
+    let reqBody = req.body;
+    if (typeof reqBody === 'string') {
+      try { reqBody = JSON.parse(reqBody); } catch (e) {}
+    }
+    reqBody = reqBody || {};
+
+    const result = await handleApiChatRequest(reqBody);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error("Vercel Serverless /api/chat Error:", err);
+    return res.status(500).json({ error: err.message || 'Internal Server Error' });
+  }
 }

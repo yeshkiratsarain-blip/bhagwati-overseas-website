@@ -171,6 +171,9 @@ export default function AICounselorChat({ isOpen, onClose, onOpenAssessment }) {
           setIsTyping(false);
           return;
         }
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Server Error:', response.status, errorData);
       }
     } catch (err) {
       console.warn("Backend /api/chat fetch error:", err);
