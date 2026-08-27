@@ -310,6 +310,9 @@ export default function AICounselorChat({ isOpen, onClose, onOpenAssessment }) {
             placeholder="Ask any question e.g. popular UK universities for Indian students..."
             value={inputMsg}
             onChange={(e) => setInputMsg(e.target.value)}
+            autoCapitalize="sentences"
+            autoCorrect="on"
+            enterKeyHint="send"
           />
           <button type="submit" className="ai-send-btn" disabled={!inputMsg.trim()}>
             <Send size={16} />
