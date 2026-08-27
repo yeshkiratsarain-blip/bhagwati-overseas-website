@@ -1,74 +1,76 @@
 // Backend API Route for AI Counselor (/api/chat)
-// Powered by RAG 2026 Ground-Truth Knowledge Base & Two-Tier Escalation Protocol
+// Powered by RAG 2026 Ground-Truth Knowledge Base & Two-Step Verification Architecture
 
-const RAG_GROUND_TRUTH_SYSTEM_PROMPT = `======================================================================
-STRICT RAG BOUNDARY & INTELLIGENT LEAD ESCALATION SYSTEM PROMPT
-======================================================================
+const RAG_GROUND_TRUTH_SYSTEM_PROMPT = `====================================================================================================
+MASTER SYSTEM PROMPT: STRICT CLOSED-DOMAIN RAG & TWO-STEP VERIFICATION ARCHITECTURE
+====================================================================================================
 
-You are the Senior Study Abroad & Visa Director at Bhagwati Overseas (Ladwa, Kurukshetra, Haryana).
+You are the Senior International Admissions & Visa Director at Bhagwati Overseas Study Abroad (Ladwa, Kurukshetra, Haryana).
 
-Your primary objective is to deliver accurate, grounded, and concise counseling advice strictly based on the attached Deep Research Knowledge Base.
+You operate strictly as a CLOSED-DOMAIN VERIFICATION AND ADMISSIONS CONSULTING ASSISTANT. Your single and absolute source of ground-truth is the text provided inside the <KNOWLEDGE_BASE_CONTEXT> XML tags.
 
-----------------------------------------------------------------------
-1. STRICT RETRIEVAL & BOUNDARY ENFORCEMENT
-----------------------------------------------------------------------
-- SINGLE SOURCE OF TRUTH: Answer queries ONLY if the specific rule, score, fee, timeline, or criteria is explicitly present in the attached Knowledge Base PDF.
-- ZERO HALLUCINATIONS: Do NOT use outside pre-training knowledge to guess immigration quotas, unverified university rules, or work permit eligibility for unlisted private colleges.
-- STRICT QUESTION RELEVANCE: Answer only what the user asks. If the user asks about Canada, extract only Canadian data. Do not dump multi-country comparison tables unprompted.
+----------------------------------------------------------------------------------------------------
+CORE OPERATIONAL MANDATES (ZERO-HALLUCINATION POLICY)
+----------------------------------------------------------------------------------------------------
+1. ABSOLUTE CLOSED-DOMAIN CONSTRAINT:
+   - You are STRICTLY FORBIDDEN from using pre-trained external knowledge, assumptions, or unverified general immigration rules.
+   - If a fact, fee, score, gap limit, or policy is not explicitly documented in <KNOWLEDGE_BASE_CONTEXT>, treat it as completely non-existent.
 
-----------------------------------------------------------------------
-2. TWO-TIER RESPONSE PROTOCOL
-----------------------------------------------------------------------
+2. MANDATORY TWO-STEP VERIFICATION PROTOCOL:
+   For EVERY user query, you must internally execute this two-step evaluation before generating an output:
 
-TIER 1: INFORMATION IS IN THE PDF (DIRECT ANSWER)
-- Deliver the answer in simple, easy-to-understand, conversational English.
-- Keep responses concise (2–4 clear bullet points or a brief paragraph).
-- For profile evaluations present in the data (e.g., HBSE board acceptance, study gap limits), state the honest ground reality and risk level directly.
-- Conclude naturally with an invitation to book a free assessment.
+   [STEP 1: INTERNAL DOCUMENT AUDIT - DO NOT OUTPUT TO USER]
+   Evaluate the user query against <KNOWLEDGE_BASE_CONTEXT> across 3 mandatory gates:
+   - Gate 1 (Exact Destination Match): Does the context contain explicit information for the EXACT country/destination requested? (e.g., If the user asks about Canada or the UK, but the retrieved text describes the USA, Gate 1 FAILS).
+   - Gate 2 (Explicit Fact Sufficiency): Does the context explicitly state the exact score, fee, intake rule, or requirement needed to answer the query?
+   - Gate 3 (Risk & Discretionary Filter): Does the query involve complex edge cases (e.g., past visa refusals, deportation, unaccredited private diplomas, third-party sponsor disputes, unlisted private colleges, or embassy interview slots)? If YES, Gate 3 FAILS immediately.
 
-TIER 2: INFORMATION IS NOT IN THE PDF / COMPLEX EDGE CASE (ESCALATION)
-Trigger this when:
-- The country, university, or course is not covered in the knowledge base.
-- The user has multiple previous visa refusals, deportation history, or complex unaccredited diplomas.
-- The query asks for real-time embassy slot availability or non-standard third-party funding routes.
+   [STEP 2: OUTPUT GENERATION & BRANCHING]
+   - BRANCH A (ALL 3 GATES PASS - 100% Documented):
+     * Deliver a concise, direct, and conversational answer in 2 to 4 bullet points.
+     * Single-Country Isolation: Answer ONLY for the country requested. Never dump cross-country tables or unrelated destinations.
+     * Eligibility First: If the user provides academic marks, boards (CBSE/HBSE/PSEB), or gaps, state the profile viability and risk rating directly before mentioning financial figures.
+     * End with a natural call to action: "For a complete document audit, visit our office or book a free profile assessment below."
 
-DO NOT attempt to fabricate an answer. Respond with this exact personalized escalation message:
+   - BRANCH B (ANY GATE FAILS - Missing Data, Irrelevant Context, or Complex Edge Case):
+     * DO NOT guess, speculate, summarize irrelevant context, or invent immigration policies.
+     * Output ONLY this exact standardized escalation card:
 
-"This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis. 
+"This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.
 
 To ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:
 
 📞 Call / WhatsApp: +91 99919-49882
-📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Haryana)
+📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)
 👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation."`;
 
 function retrieveGroundTruthResponse(userQuery) {
   const q = userQuery.toLowerCase();
-  const cta = "For an authentic document audit, visit our office at Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa) or click Book Free Assessment.";
+  const cta = "For a complete document audit, visit our office at Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana) or click Book Free Profile Assessment below.";
 
-  // Tier 2 Escalation Response Object
+  // Standardized Branch B Escalation Card
   const escalationResponse = {
     title: "Personalized Profile Escalation Required:",
-    text: "This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.\n\nTo ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:\n\n📞 Call / WhatsApp: +91 99919-49882\n📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Haryana)\n👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation.",
+    text: "This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.\n\nTo ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:\n\n📞 Call / WhatsApp: +91 99919-49882\n📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)\n👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation.",
     bullets: [
       "This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.",
       "To ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:",
       "📞 Call / WhatsApp: +91 99919-49882",
-      "📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Haryana)",
+      "📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)",
       "👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation."
     ],
     suggestAssessment: true
   };
 
-  // 1. TIER 2 ESCALATION TRIGGERS (Uncovered Countries & Complex Edge Cases)
+  // GATE 1 & GATE 3 FAILURES: Uncovered Countries, Refusals, Deportation, Complex Edge Cases
   const uncoveredCountryMatch = q.match(/\b(china|georgia|armenia|philippines|ukraine|belarus|kazakhstan|austria|belgium|switzerland|norway|denmark|czech|portugal|greece|thailand|malaysia)\b/);
-  const isComplexEdgeCase = q.includes('deport') || q.includes('multiple refusal') || q.includes('embassy slot') || q.includes('uncle sponsor') || q.includes('third party sponsor');
+  const isComplexEdgeCase = q.includes('deport') || q.includes('refusal') || q.includes('rejected') || q.includes('embassy slot') || q.includes('uncle sponsor') || q.includes('third party sponsor') || q.includes('unaccredited') || q.includes('fake');
   
   if (uncoveredCountryMatch || isComplexEdgeCase) {
     return escalationResponse;
   }
 
-  // 2. TIER 1: LANGUAGE BENCHMARK QUERIES (PTE / IELTS / TOEFL) - SINGLE COUNTRY ISOLATION
+  // BRANCH A: LANGUAGE BENCHMARK QUERIES (PTE / IELTS / TOEFL) - SINGLE COUNTRY ISOLATION
   const isLanguageQuery = q.includes('pte') || q.includes('ielts') || q.includes('toefl') || q.includes('language') || q.includes('english score') || q.includes('cutoff');
   
   if (isLanguageQuery) {
@@ -143,7 +145,7 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // 3. TIER 1: PROFILE EVALUATION QUERIES (Gaps, Diplomas, HBSE/PSEB Boards)
+  // BRANCH A: PROFILE EVALUATION QUERIES (Gaps, Diplomas, HBSE/PSEB Boards) - ELIGIBILITY FIRST
   const isProfileQuery = q.includes('gap') || q.includes('gpap') || q.includes('diploma') || q.includes('hbse') || q.includes('pseb') || q.includes('backlog') || q.includes('passout') || q.includes('12th') || q.includes('marks') || q.includes('percentage');
 
   if (isProfileQuery && !q.includes('cost') && !q.includes('fee')) {
@@ -201,7 +203,7 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // 4. TIER 1: SPOUSE & DEPENDENT VISA REGULATIONS
+  // BRANCH A: SPOUSE & DEPENDENT VISA REGULATIONS
   if (q.includes('spouse') || q.includes('dependent') || q.includes('marriage') || q.includes('husband') || q.includes('wife')) {
     if (q.includes('australia') || q.includes('subclass 500')) {
       return {
@@ -239,7 +241,7 @@ function retrieveGroundTruthResponse(userQuery) {
     }
   }
 
-  // 5. TIER 1: UK UNIVERSITIES INQUIRIES
+  // BRANCH A: UK UNIVERSITIES INQUIRIES
   if (q.includes('uk') && (q.includes('univer') || q.includes('college') || q.includes('study most') || q.includes('popular') || q.includes('best') || q.includes('top'))) {
     return {
       title: "Top & Popular UK Universities for Indian Students (2026 Ground-Truth):",
@@ -253,7 +255,7 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // 6. TIER 1: LATVIA STUDY VISA COST & PROCESS
+  // BRANCH A: LATVIA STUDY VISA COST & PROCESS
   if (q.includes('latvia')) {
     return {
       title: "Latvia Study Visa Cost & Financial Breakdown (2026 Ground-Truth):",
@@ -270,7 +272,7 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // 7. TIER 1: SINGLE-COUNTRY COST BREAKDOWN INQUIRIES
+  // BRANCH A: SINGLE-COUNTRY COST BREAKDOWN INQUIRIES
   if (q.includes('cost') || q.includes('costing') || q.includes('fee') || q.includes('expense') || q.includes('stepwise')) {
     if (q.includes('canada')) {
       return {
@@ -315,7 +317,7 @@ function retrieveGroundTruthResponse(userQuery) {
     }
   }
 
-  // 8. SPECIFIC COVERED COUNTRY HANDLERS
+  // BRANCH A: SPECIFIC COVERED COUNTRY HANDLERS
   if (q.includes('usa') || q.includes('united states') || q.includes('america')) {
     return {
       title: "United States (USA) F-1 Visa Breakdown (2026 Ground-Truth):",
@@ -442,7 +444,7 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // 9. DEFAULT UNANSWERED GENERAL QUERY -> TIER 2 ESCALATION MESSAGE
+  // BRANCH B DEFAULT (GATE 2 FAIL - Facts not fully specified)
   return escalationResponse;
 }
 
@@ -453,6 +455,10 @@ export async function handleApiChatRequest(reqBody) {
 
   const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.OPENAI_API_KEY;
 
+  // Retrieve ground-truth context dynamically
+  const groundTruthResult = retrieveGroundTruthResponse(userQuery);
+  const retrievedContextText = groundTruthResult.bullets ? groundTruthResult.bullets.join('\n') : (groundTruthResult.text || '');
+
   if (geminiKey && geminiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
     const modelCandidates = ['gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'];
 
@@ -460,6 +466,8 @@ export async function handleApiChatRequest(reqBody) {
       role: (m.sender === 'user' || m.role === 'user') ? 'user' : 'model',
       parts: [{ text: m.text || m.content || (m.bullets ? m.bullets.join('\n') : '') }]
     })) : [{ role: 'user', parts: [{ text: userQuery }] }];
+
+    const fullSystemInstruction = `${RAG_GROUND_TRUTH_SYSTEM_PROMPT}\n\n<KNOWLEDGE_BASE_CONTEXT>\n${retrievedContextText}\n</KNOWLEDGE_BASE_CONTEXT>`;
 
     for (const modelName of modelCandidates) {
       try {
@@ -472,7 +480,7 @@ export async function handleApiChatRequest(reqBody) {
           },
           body: JSON.stringify({
             contents: formattedContents,
-            system_instruction: { parts: [{ text: RAG_GROUND_TRUTH_SYSTEM_PROMPT }] },
+            system_instruction: { parts: [{ text: fullSystemInstruction }] },
             generationConfig: {
               temperature: 0.2,
               topP: 0.95,
@@ -499,8 +507,7 @@ export async function handleApiChatRequest(reqBody) {
     }
   }
 
-  // Ground-Truth RAG Knowledge Base Retriever Engine (Two-Tier Protocol)
-  const groundTruthResult = retrieveGroundTruthResponse(userQuery);
+  // Fallback to Ground-Truth RAG Knowledge Base Engine (Strict Two-Step Verification)
   return {
     source: 'rag-ground-truth-engine',
     title: groundTruthResult.title,
