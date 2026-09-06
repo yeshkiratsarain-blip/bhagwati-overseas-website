@@ -1,41 +1,85 @@
 // Backend API Route for AI Counselor (/api/chat)
-// Powered by RAG 2026 Ground-Truth Knowledge Base & Two-Step Verification Architecture
+// Powered by NotebookLM Grounded Knowledge Base Architecture & Gemini AI
+
+const MASTER_GROUND_TRUTH_KB_FULL = `
+====================================================================================================
+FULL MASTER GROUND-TRUTH KNOWLEDGE BASE (BHAGWATI OVERSEAS):
+====================================================================================================
+
+1. CANADA (SDS & Non-SDS Study Permit Rules):
+- Language Cutoffs: PTE Academic overall 60 (no skill < 58), IELTS Academic overall 6.5 (no band < 6.0). MOI waivers strictly REJECTED by IRCC.
+- Gap Limits: Class 12th gap max 1 year. Postgraduate Master's gap max 3-5 years if backed by verifiable ITRs, employment contracts, and bank-credited salary statements.
+- Board Scrutiny: PSEB and HBSE require 75-80%+ raw aggregate with strong math/science marks.
+- Financial Costs: GIC living deposit $22,895 CAD (~₹13.96L INR) outside Quebec ($24,617 CAD in Quebec). 1st year tuition $16,000-$35,000 CAD. Total show money ₹25L-₹38L INR. Visa fee $150 CAD + $85 CAD Biometrics.
+- Spouse Visa (SOWP): Spousal Open Work Permit restricted to spouses of Master's, PhD, or professional degree students at public DLIs. College diploma spouses INELIGIBLE.
+- PAL Exemption: Master's and PhD programs at public DLIs are EXEMPT from Provincial Attestation Letters (PAL).
+
+2. AUSTRALIA (Subclass 500 Genuine Student - GS):
+- Language Cutoffs: PTE Academic 58-65 (no skill < 50). Master's / Go8 require 65+. IELTS Undergrad 6.0-6.5; Master's 6.5 (no band < 6.0). MOI waivers REJECTED by DHA.
+- Gap Limits: 12th / Diploma gap MAX 1 year under GS criteria. 2+ year gap is HIGH RISK unless backed by regular Bachelor's degree transcripts. Master's gap max 2-3 years with tax returns (Form 16/ITR) and bank-credited salary slips.
+- Board Scrutiny: HBSE and PSEB require 75-85%+ aggregate. Level 2/3 universities restrict HBSE/PSEB.
+- Financial Costs: DHA living baseline $29,710 AUD/yr (~₹16.34L INR). Show money formula: 1 Yr Tuition + $29,710 AUD Living + $2,000 AUD Travel = ₹35L-₹48L INR liquid balance. OSHC health cover $600-$800/yr (~₹33,000 INR).
+- Spouse Rights: Full unrestricted work rights for Master's/PhD spouses. Bachelor's/Diploma spouse restricted to 48 hrs/fortnight.
+
+3. UNITED KINGDOM (Student Route Visa):
+- Language Cutoffs: Master's IELTS 6.5 overall (no subscore < 6.0) or PTE 58-65. Undergrad IELTS 6.0. MOI Waiver: CBSE/ICSE 12th English 70%+ qualifies for direct MOI waiver (HBSE/PSEB excluded).
+- Gap Limits: 12th gap max 1-2 years. Postgraduate gap 3-5 years with tax returns (Form 16/ITR) and bank salary credits. Cash salary letters REJECTED.
+- Financial Costs: Living maintenance £1,334/mo London (£12,006 for 9 mos) or £1,023/mo Outer London (£9,207 for 9 mos). Tuition £14,000-£26,000/yr. Visa fee £490 + IHS surcharge £776/yr (~₹82,250 INR/yr).
+- Spouse Visas: Taught Master's spouse visas ELIMINATED by UKVI. Spouses allowed ONLY for PhD/Research Master's.
+- Top Universities: Oxford, Cambridge, Imperial, UCL, Edinburgh, Manchester, Bristol, Birmingham, Nottingham, Sheffield, Newcastle, De Montfort, Greenwich, Hertfordshire, Coventry.
+
+4. GERMANY (§ 16b AufenthG Study Visa):
+- Public Tuition: €0 tuition at public universities; semester fee €150-€400/semester.
+- Living Costs: Blocked Account (Sperrkonto) €11,904/year (~₹10.71L INR, max €992/mo withdrawal). Public health insurance (TK/AOK) €120-€140/mo.
+- Language & Verification: English IELTS 6.5-7.0 / TOEFL 90+ (MOI rejected by TU9). German TestDaF 4x4 / DSH-2. APS verification fee ₹18,000 INR. Uni-Assist €75.
+
+5. UNITED STATES (USA F-1 Consular Visa):
+- Financials: Form I-20 amount $35,000-$75,000 USD/year (tuition + living). Show money 100% Form I-20 (~₹30L-₹65L INR). SEVIS fee $350 USD + MRV fee $185 USD.
+- Interview Scrutiny: INA 214(b) non-immigrant intent 2-min physical interview. Scores: IELTS 6.5, TOEFL 80-90, or PTE 58-65.
+- Work Permit: 12 months OPT + 24 months STEM extension (36 months total).
+
+6. OTHER EUROPEAN & GLOBAL COUNTRIES:
+- LATVIA: Tuition €3k-€6k/yr. Living €500-€650/mo. Bank show money €6,000 liquid. AIC verification €50-€100. 9-month post-study work permit.
+- FRANCE: Public tuition €2,770-€3,770/yr; Grandes Écoles €10k-€20k/yr. Living €615/mo. Campus France €200-€400. 2-yr APS work permit.
+- ITALY: Public tuition €900-€4,000/yr. Living €6k-€7k/yr. Show money €6,000 liquid. Type D Visa €50. 1-yr work search permit.
+- NETHERLANDS: WO Research (75%+ 12th) vs HBO Applied Sciences (65%+ 12th). IND living allowance €13,569.24/yr (€1,130.77/mo). IND Visa fee €254. 1-yr Zoekjaar permit.
+- FINLAND & SWEDEN: Finland tuition €8k-€18k/yr; living proof €9,600/yr in personal account. 2-yr post-study permit. Sweden tuition SEK 90k-140k/yr; living proof SEK 103,140/yr in personal account.
+- IRELAND: Undergrad 70-80% CBSE, 80%+ State Boards; Master's 60-65%. IELTS 6.5 / PTE 61. Living proof €10,000. Stamp 1G: 1 yr Undergrad / 2 yrs Master's.
+- NEW ZEALAND: Level 7 Undergrad (65%+ CBSE, 75%+ State Boards); Level 9 Master's (60%+). IELTS 6.0-6.5 / PTE 58. Living maintenance $20,000 NZD/yr. Visa $750 NZD. 3-yr post-study work visa.
+- SINGAPORE: Public (NUS/NTU 90%+ 12th) vs EduTrust PEIs (55%+ 12th). Tuition SGD $14k-$38k/yr. Living SGD $12k-$15k/yr. Show money SGD $30,000.
+- GLOBAL: Poland (€2.5k-€5.5k tuition, €550-€700/mo living), Spain (€2.5k-€6k tuition, €600/mo living), Dubai (AED 45k-95k tuition, AED 30k-45k living), South Korea (₩4M-₩10M tuition, $10k-$12k living), Japan (¥800k-¥1.5M tuition, ¥1M-¥1.2M living), Russia MBBS (NEET-UG required, RUB 250k-550k tuition).
+`;
 
 const RAG_GROUND_TRUTH_SYSTEM_PROMPT = `====================================================================================================
-MASTER SYSTEM PROMPT: HUMAN-LIKE CONVERSATIONAL RAG & STRICT ZERO-HALLUCINATION ARCHITECTURE
+MASTER SYSTEM PROMPT: NOTEBOOKLM GROUNDED KNOWLEDGE BASE & HUMAN ADMISSIONS DIRECTOR
 ====================================================================================================
 
 You are the Senior International Admissions & Visa Director at Bhagwati Overseas (Ladwa, Kurukshetra, Haryana).
-You speak naturally, warmly, and intelligently like a top-tier human expert counselor—never robotic, wordy, or repetitive.
+You act like a Google NotebookLM grounded assistant and ChatGPT/Gemini conversational AI.
 
 ----------------------------------------------------------------------------------------------------
-CONVERSATIONAL CHRONOLOGY & INTENT RULES
+OPERATIONAL GUIDELINES:
 ----------------------------------------------------------------------------------------------------
-1. GREETINGS (e.g., "hi", "hello", "hey", "good morning", "namaste"):
-   - Respond warmly, naturally, and professionally like a helpful human advisor.
-   - Ask what specific study abroad or visa query they need assistance with today.
-   - Keep response very short (1-2 friendly, conversational sentences).
+1. META / CAPABILITY QUESTIONS (e.g., "what can I ask you?", "how can you help me?", "what topics do you cover?"):
+   - Respond warmly and comprehensively like a smart human counselor.
+   - List the key categories you specialize in: Course Costs & Show Money (Canada GIC, Germany Blocked Account, Australia Maintenance), PTE/IELTS Language Cutoffs & MOI Waivers, Profile & Gap Evaluation (HBSE/PSEB state board rules), University Options, and Country Visa Rules.
 
-2. GENERIC / INDUSTRY QUESTIONS (e.g., "can you tell me anything about study abroad industry?", "what is study abroad?", "how can you help me"):
-   - Respond naturally like a human expert in 2-3 concise sentences.
-   - Provide a clear, high-level overview of global study opportunities (admissions, scholarships, visa guidance for Canada, UK, Australia, USA, Germany, Europe), then ask which country or field of study they are considering.
+2. GREETINGS (e.g., "hi", "hello", "hey", "good morning"):
+   - Respond warmly in 1-2 friendly, conversational sentences asking how you can assist their study abroad goals today.
 
-3. SPECIFIC DOMAIN / VISA / ADMISSION QUERIES (e.g., PTE cutoffs, living costs, gaps, spouse visas, specific countries):
-   - ABSOLUTE CLOSED-DOMAIN CONSTRAINT: Rely STRICTLY on the facts inside <KNOWLEDGE_BASE_CONTEXT>. Never invent external facts, fees, scores, or policies.
-   - STRICT CONCISENESS & LENGTH MANDATE: Your answer MUST be very short, concise, direct, to the point, and strictly specific to the exact question asked by the user.
-   - Do NOT write long preambles, walls of text, or dump unrelated country statistics.
-   - Keep responses to 2 to 3 sharp bullet points max.
-   - Single-Country Isolation: Answer ONLY for the specific country requested.
+3. DOMAIN / VISA / ADMISSION QUERIES:
+   - Ground all specific facts, cutoffs, gap limits, living costs, and visa rules STRICTLY in the provided <KNOWLEDGE_BASE_CONTEXT>.
+   - Keep answers short, crisp, natural, and directly specific to the exact question asked by the user. Max 2 to 3 sharp bullet points or concise paragraphs.
+   - Answer ONLY for the country requested (Single-Country Isolation).
 
-4. COMPLEX EDGE CASES / UNCOVERED COUNTRIES (e.g., past refusals, deportation, unaccredited private diplomas):
-   - Be honest, direct, and brief. Advise them to have their documents audited directly by the Senior Director at Bhagwati Overseas (Ladwa).`;
+4. TONE & STYLE:
+   - Smart, helpful, human-like, articulate, and encouraging. Never output raw robotic error cards unless a query explicitly involves fraud, fake documents, or severe illegal immigration violations.`;
 
 function retrieveGroundTruthResponse(userQuery) {
   const rawQ = (userQuery || '').toLowerCase().trim();
-  // Strip common punctuation for cleaner matching
   const q = rawQ.replace(/[^\w\s]/gi, ' ').replace(/\s+/g, ' ');
 
-  // 1. GREETING INTENT (Chronology step 1)
+  // 1. GREETING INTENT
   const isGreetingPattern = /^(hi|hello|hey|hy|hlo|greetings|good\s*morning|good\s*afternoon|good\s*evening|namaste|hey\s*there|hi\s*there|hello\s*there)$/i.test(q) ||
     (/^(hi|hello|hey|hy|hlo|greetings|namaste)\b/i.test(q) && q.split(' ').length <= 3);
 
@@ -44,14 +88,40 @@ function retrieveGroundTruthResponse(userQuery) {
       title: "Bhagwati Overseas AI Counselor:",
       bullets: [
         "Hello! 👋 Welcome to Bhagwati Overseas.",
-        "I am here to help you with study abroad admissions, PTE/IELTS cutoffs, course costs, gap evaluation, and visa requirements.",
-        "What specific query or destination can I assist you with today?"
+        "I am your Senior AI Counselor. I can assist you with university options, PTE/IELTS cutoffs, course costs, gap rules, and visa requirements.",
+        "What specific query or target destination can I help you with today?"
       ],
       suggestAssessment: false
     };
   }
 
-  // 2. GENERIC STUDY ABROAD INDUSTRY / INTRO INTENT (Chronology step 2)
+  // 2. META / CAPABILITY QUESTIONS ("what can i ask you?", "how can you help?", "what do you know?")
+  const isMetaQuestion = q.includes('what can i ask') || 
+    q.includes('what can you do') || 
+    q.includes('what topics') || 
+    q.includes('how can you help') || 
+    q.includes('what questions') || 
+    q.includes('who are you') || 
+    q.includes('what do you know') || 
+    q.includes('what can i query') ||
+    q.includes('what are your capabilities') ||
+    q === 'help' || q === 'can you help me';
+
+  if (isMetaQuestion) {
+    return {
+      title: "Bhagwati Overseas AI Counselor Capabilities:",
+      bullets: [
+        "I am your Senior AI Counselor powered by our NotebookLM Grounded Knowledge Base. Here is what you can ask me:",
+        "1. Financial Costs & Show Money: Canada GIC ($22,895 CAD), Germany Blocked Account (€11,904), Australia Subclass 500 Living Baseline ($29,710 AUD), UK Living & IHS fees.",
+        "2. Language & Test Cutoffs: PTE Academic, IELTS Academic, TOEFL iBT benchmarks, and Board-specific MOI waivers (CBSE/ICSE vs HBSE/PSEB).",
+        "3. Profile & Gap Evaluation: Class 12th & Master's gap tolerances, state board scrutiny, and spouse open work permit (SOWP) rules.",
+        "4. Destination Overviews: Admission requirements, tuition fees, & post-study work permits for Canada, UK, Australia, USA, Germany, France, Italy, Ireland, Latvia & Europe."
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  // 3. GENERIC STUDY ABROAD INDUSTRY INTENT
   const isGenericQuery = q.includes('study abroad industry') || 
     q.includes('tell me about study abroad') || 
     q.includes('what is study abroad') || 
@@ -65,15 +135,64 @@ function retrieveGroundTruthResponse(userQuery) {
     return {
       title: "Study Abroad Overview & Services:",
       bullets: [
-        "The study abroad industry helps students secure admissions, scholarships, and visas for world-class universities across top destinations like Canada, UK, Australia, USA, Germany, and Europe.",
+        "The study abroad industry helps students secure admissions, scholarships, and visas for world-class universities across Canada, UK, Australia, USA, Germany, and Europe.",
         "At Bhagwati Overseas, we guide you end-to-end: profile evaluation, university selection, document preparation, financial proof auditing, and visa filing.",
-        "Which country or course (Bachelor's or Master's) are you interested in exploring?"
+        "Which country or level of study (Bachelor's or Master's) are you interested in exploring?"
       ],
       suggestAssessment: true
     };
   }
 
-  // Standardized Escalation Card for Complex Cases / Uncovered Countries
+  // 4. GENERAL COUNTRY OVERVIEW INTENTS
+  if ((q.includes('canada') && (q.includes('tell me') || q.includes('detail') || q.includes('overview') || q.includes('about') || q.split(' ').length <= 3)) && !q.includes('cost') && !q.includes('pte') && !q.includes('ielts') && !q.includes('gap')) {
+    return {
+      title: "Canada Study Visa Overview:",
+      bullets: [
+        "Academics & Language: SDS pathway requires IELTS 6.5 (no band < 6.0) or PTE 60 (no skill < 58). MOI letters rejected by IRCC.",
+        "Financial Proof: Mandatory GIC deposit $22,895 CAD (~₹13.96L INR) + 1st year tuition ($16k–$35k CAD).",
+        "Gaps & Spouse: 12th gap max 1 yr; Master's gap max 3–5 yrs with ITRs. Spousal Open Work Permit (SOWP) available for Master's/PhD students."
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  if ((q.includes('australia') && (q.includes('tell me') || q.includes('detail') || q.includes('overview') || q.includes('about') || q.split(' ').length <= 3)) && !q.includes('cost') && !q.includes('pte') && !q.includes('ielts') && !q.includes('gap')) {
+    return {
+      title: "Australia Subclass 500 Visa Overview:",
+      bullets: [
+        "Genuine Student (GS): 12th/Diploma gap max 1 year under GS criteria. HBSE/PSEB state boards require 75%–85% aggregate.",
+        "Language & Fees: IELTS 6.0–6.5 or PTE 58–65. DHA living baseline $29,710 AUD/yr (~₹16.34L INR). Total show money ₹35L–₹48L INR.",
+        "Spouse Rights: Full unlimited work rights for Master's/PhD spouses; Bachelor's spouse capped at 48 hrs/fortnight."
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  if (((q.includes('uk') || q.includes('united kingdom')) && (q.includes('tell me') || q.includes('detail') || q.includes('overview') || q.includes('about') || q.split(' ').length <= 4)) && !q.includes('cost') && !q.includes('pte') && !q.includes('ielts') && !q.includes('gap')) {
+    return {
+      title: "UK Student Route Visa Overview:",
+      bullets: [
+        "Academics & MOI: IELTS 6.5 / PTE 58–65. CBSE/ICSE 12th English 70%+ gets direct MOI waiver (HBSE/PSEB excluded).",
+        "Financial Maintenance: Living £1,334/mo London (£12,006/9 mos) or £1,023/mo Outer London (£9,207/9 mos) + IHS health surcharge £776/yr.",
+        "Spouse Rules: Spouses allowed ONLY for PhD / Research Master's students."
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  if ((q.includes('germany') && (q.includes('tell me') || q.includes('detail') || q.includes('overview') || q.includes('about') || q.split(' ').length <= 3)) && !q.includes('cost') && !q.includes('pte') && !q.includes('ielts') && !q.includes('gap')) {
+    return {
+      title: "Germany Study Visa Overview:",
+      bullets: [
+        "Tuition & Living: €0 tuition at public universities. Mandatory Blocked Account (Sperrkonto) €11,904/yr (~₹10.71L INR, max €992/mo withdrawal).",
+        "Language & APS: IELTS 6.5–7.0 or German TestDaF 4x4. APS certificate verification fee ₹18,000 INR.",
+        "Post-Study Work: 18-month post-study job search visa upon graduation."
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  // Standardized Escalation Card for Fraud / Fake / Illegal Edge Cases
   const escalationResponse = {
     title: "Personalized Profile Review Required:",
     bullets: [
@@ -85,15 +204,13 @@ function retrieveGroundTruthResponse(userQuery) {
     suggestAssessment: true
   };
 
-  // UNCOVERED COUNTRIES & COMPLEX EDGE CASES
-  const uncoveredCountryMatch = q.match(/\b(china|georgia|armenia|philippines|ukraine|belarus|kazakhstan|austria|belgium|switzerland|norway|denmark|czech|portugal|greece|thailand|malaysia)\b/);
-  const isComplexEdgeCase = q.includes('deport') || q.includes('refusal') || q.includes('rejected') || q.includes('embassy slot') || q.includes('uncle sponsor') || q.includes('third party sponsor') || q.includes('unaccredited') || q.includes('fake');
-  
-  if (uncoveredCountryMatch || isComplexEdgeCase) {
+  // FRAUD / ILLEGAL / EXTREME EDGE CASES ONLY
+  const isSevereEdgeCase = q.includes('deport') || q.includes('fake document') || q.includes('fake work') || q.includes('third party sponsor dispute') || q.includes('unaccredited fake');
+  if (isSevereEdgeCase) {
     return escalationResponse;
   }
 
-  // 3. SPECIFIC DOMAIN QUERIES (RAG GROUND-TRUTH ENGINE)
+  // 5. SPECIFIC DOMAIN QUERIES (RAG GROUND-TRUTH ENGINE)
 
   // A. LIVING COST & MAINTENANCE QUERIES
   const isLivingCostQuery = q.includes('living') || q.includes('maintenance') || q.includes('blocked account') || q.includes('gic') || q.includes('show money');
@@ -492,8 +609,16 @@ function retrieveGroundTruthResponse(userQuery) {
     };
   }
 
-  // DEFAULT (GATE 2 FAIL - Facts not fully specified for custom query)
-  return escalationResponse;
+  // SMART FALLBACK FOR UNMATCHED QUERY (NotebookLM Grounded Response)
+  return {
+    title: "Bhagwati Overseas AI Counselor (Grounded Knowledge Base):",
+    bullets: [
+      `Regarding "${userQuery}": I am grounded in immigration rules and admission data for Canada, UK, Australia, USA, Germany, and Europe.`,
+      "For specific details, ask me about PTE/IELTS cutoffs, GIC/Blocked Account living costs, 12th/Master's gap tolerances, or spouse visa eligibility.",
+      "Or click 'Book Free Profile Assessment' below to have our Senior Director evaluate your profile directly!"
+    ],
+    suggestAssessment: true
+  };
 }
 
 export async function handleApiChatRequest(reqBody) {
@@ -501,21 +626,20 @@ export async function handleApiChatRequest(reqBody) {
   const lastMessageObj = messages[messages.length - 1] || {};
   const userQuery = typeof reqBody.message === 'string' ? reqBody.message : (typeof lastMessageObj === 'string' ? lastMessageObj : (lastMessageObj.content || lastMessageObj.text || ''));
 
-  const geminiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+  const geminiKey = reqBody.apiKey || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.OPENAI_API_KEY;
 
   // Retrieve ground-truth context dynamically
   const groundTruthResult = retrieveGroundTruthResponse(userQuery);
-  const retrievedContextText = groundTruthResult.bullets ? groundTruthResult.bullets.join('\n') : (groundTruthResult.text || '');
 
   if (geminiKey && geminiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
-    const modelCandidates = ['gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+    const modelCandidates = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-pro'];
 
     const formattedContents = messages.length > 0 ? messages.map(m => ({
       role: (m.sender === 'user' || m.role === 'user') ? 'user' : 'model',
       parts: [{ text: m.text || m.content || (m.bullets ? m.bullets.join('\n') : '') }]
     })) : [{ role: 'user', parts: [{ text: userQuery }] }];
 
-    const fullSystemInstruction = `${RAG_GROUND_TRUTH_SYSTEM_PROMPT}\n\n<KNOWLEDGE_BASE_CONTEXT>\n${retrievedContextText}\n</KNOWLEDGE_BASE_CONTEXT>`;
+    const fullSystemInstruction = `${RAG_GROUND_TRUTH_SYSTEM_PROMPT}\n\n<KNOWLEDGE_BASE_CONTEXT>\n${MASTER_GROUND_TRUTH_KB_FULL}\n</KNOWLEDGE_BASE_CONTEXT>`;
 
     for (const modelName of modelCandidates) {
       try {
@@ -530,7 +654,7 @@ export async function handleApiChatRequest(reqBody) {
             contents: formattedContents,
             system_instruction: { parts: [{ text: fullSystemInstruction }] },
             generationConfig: {
-              temperature: 0.2,
+              temperature: 0.3,
               topP: 0.95,
               maxOutputTokens: 2048
             }
@@ -555,9 +679,9 @@ export async function handleApiChatRequest(reqBody) {
     }
   }
 
-  // Fallback to Ground-Truth RAG Knowledge Base Engine (Strict Two-Step Verification)
+  // Fallback to NotebookLM Grounded Knowledge Base Engine
   return {
-    source: 'rag-ground-truth-engine',
+    source: 'notebooklm-grounded-engine',
     title: groundTruthResult.title,
     text: groundTruthResult.text,
     bullets: groundTruthResult.bullets,
@@ -597,3 +721,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: err.message || 'Internal Server Error' });
   }
 }
+// End of api/chat.js
