@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Send, X, ShieldCheck, ArrowUpRight, Sparkles } from 'lucide-react';
 
 const QUICK_PROMPTS = [
+  "Hi! How can you help me?",
+  "Can you tell me anything about study abroad industry?",
   "In which UK universities do Indian students study most?",
-  "12th HBSE 2023 75% Non-Med for Australia?",
-  "12th CBSE 2024 80% for UK with IELTS waiver?",
-  "Stepwise costing for Bachelor's in Australia?",
-  "Latvia Bachelor's Cost & Expenses Breakdown?",
-  "Canada SDS 1st Year Tuition + GIC Breakdown?",
-  "Germany Public University APS & Blocked Account Cost?",
+  "PTE score requirements for Canada SDS visa?",
+  "12th HBSE 75% aggregate for Australia Subclass 500?",
+  "Germany Blocked Account & living cost requirement?",
+  "Canada GIC deposit + 1st year tuition breakdown?",
   "Australia Subclass 500 Spouse Visa eligibility?"
 ];
 
@@ -82,9 +82,9 @@ export default function AICounselorChat({ isOpen, onClose, onOpenAssessment }) {
       sender: 'ai',
       title: "Bhagwati Overseas Senior AI Counselor:",
       bullets: [
-        "Welcome: I am your Senior International Admissions & Visa Director at Bhagwati Overseas (Ladwa, Haryana).",
-        "How I can assist: Ask me any direct question (e.g. popular UK/Australia universities for Indian students, PTE cutoffs, stepwise costing, spouse visas, or profile evaluation).",
-        "Getting started: Type your question below or pick a quick prompt to begin!"
+        "Hello! 👋 Welcome to Bhagwati Overseas.",
+        "How can I assist you with your study abroad or visa queries today?",
+        "Feel free to ask any question or pick a prompt below to get started!"
       ],
       time: 'Just now'
     }

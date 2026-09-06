@@ -2,67 +2,90 @@
 // Powered by RAG 2026 Ground-Truth Knowledge Base & Two-Step Verification Architecture
 
 const RAG_GROUND_TRUTH_SYSTEM_PROMPT = `====================================================================================================
-MASTER SYSTEM PROMPT: STRICT CLOSED-DOMAIN RAG & TWO-STEP VERIFICATION ARCHITECTURE
+MASTER SYSTEM PROMPT: HUMAN-LIKE CONVERSATIONAL RAG & STRICT ZERO-HALLUCINATION ARCHITECTURE
 ====================================================================================================
 
-You are the Senior International Admissions & Visa Director at Bhagwati Overseas Study Abroad (Ladwa, Kurukshetra, Haryana).
-
-You operate strictly as a CLOSED-DOMAIN VERIFICATION AND ADMISSIONS CONSULTING ASSISTANT. Your single and absolute source of ground-truth is the text provided inside the <KNOWLEDGE_BASE_CONTEXT> XML tags.
+You are the Senior International Admissions & Visa Director at Bhagwati Overseas (Ladwa, Kurukshetra, Haryana).
+You speak naturally, warmly, and intelligently like a top-tier human expert counselor—never robotic, wordy, or repetitive.
 
 ----------------------------------------------------------------------------------------------------
-CORE OPERATIONAL MANDATES (ZERO-HALLUCINATION POLICY)
+CONVERSATIONAL CHRONOLOGY & INTENT RULES
 ----------------------------------------------------------------------------------------------------
-1. ABSOLUTE CLOSED-DOMAIN CONSTRAINT:
-   - You are STRICTLY FORBIDDEN from using pre-trained external knowledge, assumptions, or unverified general immigration rules.
-   - If a fact, fee, score, gap limit, or policy is not explicitly documented in <KNOWLEDGE_BASE_CONTEXT>, treat it as completely non-existent.
+1. GREETINGS (e.g., "hi", "hello", "hey", "good morning", "namaste"):
+   - Respond warmly, naturally, and professionally like a helpful human advisor.
+   - Ask what specific study abroad or visa query they need assistance with today.
+   - Keep response very short (1-2 friendly, conversational sentences).
 
-2. MANDATORY TWO-STEP VERIFICATION PROTOCOL:
-   For EVERY user query, you must internally execute this two-step evaluation before generating an output:
+2. GENERIC / INDUSTRY QUESTIONS (e.g., "can you tell me anything about study abroad industry?", "what is study abroad?", "how can you help me"):
+   - Respond naturally like a human expert in 2-3 concise sentences.
+   - Provide a clear, high-level overview of global study opportunities (admissions, scholarships, visa guidance for Canada, UK, Australia, USA, Germany, Europe), then ask which country or field of study they are considering.
 
-   [STEP 1: INTERNAL DOCUMENT AUDIT - DO NOT OUTPUT TO USER]
-   Evaluate the user query against <KNOWLEDGE_BASE_CONTEXT> across 3 mandatory gates:
-   - Gate 1 (Exact Destination Match): Does the context contain explicit information for the EXACT country/destination requested? (e.g., If the user asks about Canada or the UK, but the retrieved text describes the USA, Gate 1 FAILS).
-   - Gate 2 (Explicit Fact Sufficiency): Does the context explicitly state the exact score, fee, intake rule, or requirement needed to answer the query?
-   - Gate 3 (Risk & Discretionary Filter): Does the query involve complex edge cases (e.g., past visa refusals, deportation, unaccredited private diplomas, third-party sponsor disputes, unlisted private colleges, or embassy interview slots)? If YES, Gate 3 FAILS immediately.
+3. SPECIFIC DOMAIN / VISA / ADMISSION QUERIES (e.g., PTE cutoffs, living costs, gaps, spouse visas, specific countries):
+   - ABSOLUTE CLOSED-DOMAIN CONSTRAINT: Rely STRICTLY on the facts inside <KNOWLEDGE_BASE_CONTEXT>. Never invent external facts, fees, scores, or policies.
+   - STRICT CONCISENESS & LENGTH MANDATE: Your answer MUST be very short, concise, direct, to the point, and strictly specific to the exact question asked by the user.
+   - Do NOT write long preambles, walls of text, or dump unrelated country statistics.
+   - Keep responses to 2 to 3 sharp bullet points max.
+   - Single-Country Isolation: Answer ONLY for the specific country requested.
 
-   [STEP 2: OUTPUT GENERATION & BRANCHING]
-   - BRANCH A (ALL 3 GATES PASS - 100% Documented):
-     * Deliver a concise, direct, and conversational answer in 2 to 4 bullet points.
-     * Single-Country Isolation: Answer ONLY for the country requested. Never dump cross-country tables or unrelated destinations.
-     * Eligibility First: If the user provides academic marks, boards (CBSE/HBSE/PSEB), or gaps, state the profile viability and risk rating directly before mentioning financial figures.
-     * End with a natural call to action: "For a complete document audit, visit our office or book a free profile assessment below."
-
-   - BRANCH B (ANY GATE FAILS - Missing Data, Irrelevant Context, or Complex Edge Case):
-     * DO NOT guess, speculate, summarize irrelevant context, or invent immigration policies.
-     * Output ONLY this exact standardized escalation card:
-
-"This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.
-
-To ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:
-
-📞 Call / WhatsApp: +91 99919-49882
-📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)
-👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation."`;
+4. COMPLEX EDGE CASES / UNCOVERED COUNTRIES (e.g., past refusals, deportation, unaccredited private diplomas):
+   - Be honest, direct, and brief. Advise them to have their documents audited directly by the Senior Director at Bhagwati Overseas (Ladwa).`;
 
 function retrieveGroundTruthResponse(userQuery) {
-  const q = userQuery.toLowerCase();
-  const cta = "For a complete document audit, visit our office at Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana) or click Book Free Profile Assessment below.";
+  const rawQ = (userQuery || '').toLowerCase().trim();
+  // Strip common punctuation for cleaner matching
+  const q = rawQ.replace(/[^\w\s]/gi, ' ').replace(/\s+/g, ' ');
 
-  // Standardized Branch B Escalation Card
+  // 1. GREETING INTENT (Chronology step 1)
+  const isGreetingPattern = /^(hi|hello|hey|hy|hlo|greetings|good\s*morning|good\s*afternoon|good\s*evening|namaste|hey\s*there|hi\s*there|hello\s*there)$/i.test(q) ||
+    (/^(hi|hello|hey|hy|hlo|greetings|namaste)\b/i.test(q) && q.split(' ').length <= 3);
+
+  if (isGreetingPattern) {
+    return {
+      title: "Bhagwati Overseas AI Counselor:",
+      bullets: [
+        "Hello! 👋 Welcome to Bhagwati Overseas.",
+        "I am here to help you with study abroad admissions, PTE/IELTS cutoffs, course costs, gap evaluation, and visa requirements.",
+        "What specific query or destination can I assist you with today?"
+      ],
+      suggestAssessment: false
+    };
+  }
+
+  // 2. GENERIC STUDY ABROAD INDUSTRY / INTRO INTENT (Chronology step 2)
+  const isGenericQuery = q.includes('study abroad industry') || 
+    q.includes('tell me about study abroad') || 
+    q.includes('what is study abroad') || 
+    q.includes('why study abroad') || 
+    q.includes('how study abroad works') ||
+    q.includes('about bhagwati overseas') ||
+    q.includes('what services') ||
+    (q.includes('study abroad') && (q.includes('anything') || q.includes('tell me') || q.includes('information') || q.includes('general') || q.includes('overview')));
+
+  if (isGenericQuery) {
+    return {
+      title: "Study Abroad Overview & Services:",
+      bullets: [
+        "The study abroad industry helps students secure admissions, scholarships, and visas for world-class universities across top destinations like Canada, UK, Australia, USA, Germany, and Europe.",
+        "At Bhagwati Overseas, we guide you end-to-end: profile evaluation, university selection, document preparation, financial proof auditing, and visa filing.",
+        "Which country or course (Bachelor's or Master's) are you interested in exploring?"
+      ],
+      suggestAssessment: true
+    };
+  }
+
+  // Standardized Escalation Card for Complex Cases / Uncovered Countries
   const escalationResponse = {
-    title: "Personalized Profile Escalation Required:",
-    text: "This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.\n\nTo ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:\n\n📞 Call / WhatsApp: +91 99919-49882\n📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)\n👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation.",
+    title: "Personalized Profile Review Required:",
     bullets: [
-      "This specific profile and pathway involves individual embassy compliance checks that are evaluated on a case-by-case basis.",
-      "To ensure complete accuracy and prevent visa risk, our Senior Visa Director will review your documents directly:",
-      "📞 Call / WhatsApp: +91 99919-49882",
-      "📍 Visit Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Kurukshetra, Haryana)",
-      "👉 Click 'Book Free Profile Assessment' below to submit your details for a priority evaluation."
+      "This specific profile or pathway involves individual embassy compliance checks evaluated on a case-by-case basis.",
+      "To prevent visa risk, our Senior Visa Director will review your exact academic and financial documents directly.",
+      "📞 Call / WhatsApp: +91 99919-49882 | 📍 Office: Bhagwati Overseas (Above Nirula Clinic, Behind Bus Stand, Ladwa, Haryana)",
+      "👉 Click 'Book Free Profile Assessment' below to submit your details for priority evaluation."
     ],
     suggestAssessment: true
   };
 
-  // GATE 1 & GATE 3 FAILURES: Uncovered Countries, Refusals, Deportation, Complex Edge Cases
+  // UNCOVERED COUNTRIES & COMPLEX EDGE CASES
   const uncoveredCountryMatch = q.match(/\b(china|georgia|armenia|philippines|ukraine|belarus|kazakhstan|austria|belgium|switzerland|norway|denmark|czech|portugal|greece|thailand|malaysia)\b/);
   const isComplexEdgeCase = q.includes('deport') || q.includes('refusal') || q.includes('rejected') || q.includes('embassy slot') || q.includes('uncle sponsor') || q.includes('third party sponsor') || q.includes('unaccredited') || q.includes('fake');
   
@@ -70,18 +93,19 @@ function retrieveGroundTruthResponse(userQuery) {
     return escalationResponse;
   }
 
-  // BRANCH A: MANDATORY LIVING COST & EXPENSE LOOKUP RULES
-  const isLivingCostQuery = q.includes('living') || q.includes('living cost') || q.includes('living expense') || q.includes('maintenance') || q.includes('blocked account') || q.includes('gic') || q.includes('show money');
+  // 3. SPECIFIC DOMAIN QUERIES (RAG GROUND-TRUTH ENGINE)
+
+  // A. LIVING COST & MAINTENANCE QUERIES
+  const isLivingCostQuery = q.includes('living') || q.includes('maintenance') || q.includes('blocked account') || q.includes('gic') || q.includes('show money');
 
   if (isLivingCostQuery) {
     if (q.includes('australia')) {
       return {
-        title: "Australia Subclass 500 Living Cost Requirement (2026 Ground-Truth):",
+        title: "Australia Subclass 500 Living Cost Requirement:",
         bullets: [
-          "DHA Living Baseline: $29,710 AUD / year (~₹16.34 Lakhs INR) mandatory living maintenance norm for single applicant.",
-          "Show Money Formula: 1 Year Tuition + $29,710 AUD Living + $2,000 AUD Travel = ₹35 Lakhs – ₹48 Lakhs INR verifiable liquid bank balance.",
-          "OSHC Health Cover: Compulsory OSHC health cover of $600 – $800 / year (~₹33,000 INR/year).",
-          cta
+          "DHA Baseline: $29,710 AUD / year (~₹16.34 Lakhs INR) living maintenance norm for single applicant.",
+          "Show Money Formula: 1 Year Tuition + $29,710 AUD Living + $2,000 AUD Travel = ₹35L–₹48L INR verifiable liquid balance.",
+          "OSHC Cover: Mandatory OSHC health cover of $600–$800 / year (~₹33,000 INR)."
         ],
         suggestAssessment: true
       };
@@ -89,12 +113,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('germany')) {
       return {
-        title: "Germany Blocked Account & Living Cost Norm (2026 Ground-Truth):",
+        title: "Germany Blocked Account & Living Cost Norm:",
         bullets: [
-          "Mandatory Blocked Account (Sperrkonto): €11,904 / year (~₹10.71 Lakhs INR) deposited in Expatrio or Fintiba under § 16b AufenthG.",
-          "Monthly Withdrawal Limit: Allows maximum withdrawal of €992 / month (~₹89,280 INR/month) for living expenses.",
-          "Public Health Insurance: Mandatory TK/AOK public student health insurance of €120 – €140 / month (~₹10,800 – ₹12,600 INR/month).",
-          cta
+          "Blocked Account (Sperrkonto): €11,904 / year (~₹10.71 Lakhs INR) under § 16b AufenthG.",
+          "Monthly Withdrawal: Max €992 / month (~₹89,280 INR) for living expenses.",
+          "Health Insurance: Mandatory public insurance (TK/AOK) of €120–€140 / month."
         ],
         suggestAssessment: true
       };
@@ -102,11 +125,10 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('canada')) {
       return {
-        title: "Canada GIC & Living Deposit Requirement (2026 Ground-Truth):",
+        title: "Canada GIC & Living Deposit Requirement:",
         bullets: [
-          "Mandatory GIC Deposit: $22,895 CAD (~₹13.96 Lakhs INR) deposited in Scotiabank/CIBC for single applicants outside Quebec ($24,617 CAD in Quebec).",
-          "Show Money Formula: 1st Year Tuition + $22,895 CAD GIC = ₹25 Lakhs – ₹38 Lakhs INR total verifiable liquid funds.",
-          cta
+          "Mandatory GIC: $22,895 CAD (~₹13.96 Lakhs INR) in Scotiabank/CIBC outside Quebec ($24,617 CAD in Quebec).",
+          "Show Money Formula: 1st Year Tuition + $22,895 CAD GIC = ₹25L–₹38L INR total verifiable liquid funds."
         ],
         suggestAssessment: true
       };
@@ -114,12 +136,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('uk') || q.includes('united kingdom')) {
       return {
-        title: "UK Student Route Living Maintenance Norm (2026 Ground-Truth):",
+        title: "UK Student Route Living Maintenance Norm:",
         bullets: [
-          "Inside London Living Norm: £1,334 / month for up to 9 months (£12,006 total / ~₹12.72 Lakhs INR).",
-          "Outside London Living Norm: £1,023 / month for up to 9 months (£9,207 total / ~₹9.76 Lakhs INR).",
-          "IHS Healthcare Surcharge: Mandatory Immigration Health Surcharge (IHS) of £776 / year (~₹82,250 INR/year).",
-          cta
+          "Inside London: £1,334 / month up to 9 months (£12,006 total / ~₹12.72 Lakhs INR).",
+          "Outside London: £1,023 / month up to 9 months (£9,207 total / ~₹9.76 Lakhs INR).",
+          "IHS Surcharge: Mandatory UKVI Healthcare Surcharge of £776 / year (~₹82,250 INR)."
         ],
         suggestAssessment: true
       };
@@ -127,105 +148,96 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('latvia')) {
       return {
-        title: "Latvia Living Maintenance & Show Money (2026 Ground-Truth):",
+        title: "Latvia Living Maintenance & Show Money:",
         bullets: [
-          "Living Maintenance Norm: €500 – €650 / month (~₹45,000 – ₹58,500 INR/month).",
-          "Bank Show Money: Minimum €6,000 liquid balance (~₹5.50 Lakhs – ₹6.50 Lakhs INR) in student or parent account.",
-          cta
+          "Living Maintenance: €500–€650 / month (~₹45,000–₹58,500 INR).",
+          "Bank Show Money: Minimum €6,000 liquid balance (~₹5.50L–₹6.50L INR) in student or parent account."
         ],
         suggestAssessment: true
       };
     }
   }
 
-  // BRANCH A: LANGUAGE BENCHMARK QUERIES (PTE / IELTS / TOEFL) - SINGLE COUNTRY ISOLATION
+  // B. LANGUAGE BENCHMARK QUERIES (PTE / IELTS / TOEFL)
   const isLanguageQuery = q.includes('pte') || q.includes('ielts') || q.includes('toefl') || q.includes('language') || q.includes('english score') || q.includes('cutoff');
   
   if (isLanguageQuery) {
     if (q.includes('canada')) {
       return {
-        title: "Canada Language Requirement (2026 Ground-Truth):",
+        title: "Canada Language Benchmark:",
         bullets: [
-          "PTE Academic Benchmark: Minimum overall score of 60 with no communicative skill subscore below 58 across major public DLIs.",
-          "IELTS Academic Equivalent: Overall score of 6.5 with no individual band below 6.0.",
-          "MOI Waiver Rule: Medium of Instruction (MOI) waivers are strictly NOT accepted by IRCC for visa processing from South Asian applicants; a valid language test is mandatory.",
-          cta
+          "PTE Academic: Overall 60 with no skill subscore below 58 across major public DLIs.",
+          "IELTS Academic: Overall 6.5 with no band below 6.0.",
+          "MOI Waiver: Medium of Instruction (MOI) letters are strictly REJECTED by IRCC."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('australia')) {
       return {
-        title: "Australia Subclass 500 Language Requirement (2026 Ground-Truth):",
+        title: "Australia Subclass 500 Language Benchmark:",
         bullets: [
-          "PTE Academic Benchmark: Overall score of 58 to 65 with no communicative skill below 50. Master's programs and Go8 universities require 65+ overall.",
-          "IELTS Academic Equivalent: Overall score of 6.0 to 6.5 for undergraduate programs, and 6.5 (no band below 6.0) for Master's degrees.",
-          "MOI Waiver Rule: Medium of Instruction (MOI) waivers are strictly NOT accepted by the Department of Home Affairs (DHA) for visa issuance.",
-          cta
+          "PTE Academic: Overall 58 to 65 (no skill < 50). Master's / Go8 universities require 65+.",
+          "IELTS Academic: Undergrad 6.0–6.5; Master's 6.5 (no band < 6.0).",
+          "MOI Waiver: MOI letters are strictly REJECTED by DHA."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('uk') || q.includes('united kingdom')) {
       return {
-        title: "UK Student Route Language Benchmark (2026 Ground-Truth):",
+        title: "UK Student Route Language Benchmark:",
         bullets: [
-          "Master's Entry: IELTS Academic 6.5 overall (no subscore below 6.0) or PTE Academic 58–65 overall.",
-          "Undergraduate Entry: IELTS Academic 6.0 overall (no subscore below 5.5).",
-          "MOI Waiver Rule: CBSE and ICSE students with 70% to 80%+ in Class 12th English qualify for direct IELTS/PTE waivers. PSEB and HBSE state board applicants are explicitly excluded from MOI eligibility.",
-          cta
+          "Master's Entry: IELTS 6.5 overall (no subscore < 6.0) or PTE 58–65 overall.",
+          "Undergrad Entry: IELTS 6.0 overall (no subscore < 5.5).",
+          "MOI Waiver: CBSE/ICSE 12th English 70%+ qualifies for MOI waiver (HBSE/PSEB excluded)."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('germany')) {
       return {
-        title: "Germany Language Benchmark (2026 Ground-Truth):",
+        title: "Germany Language Benchmark:",
         bullets: [
-          "English-Taught Programs: IELTS Academic overall 6.5 to 7.0 (no band below 6.0) or TOEFL iBT 90+. MOI letters are rejected by top-tier TU9 public research universities.",
-          "German-Taught Programs: TestDaF Level 4x4, DSH-2, or Goethe-Zertifikat C1.",
-          cta
+          "English-Taught: IELTS 6.5–7.0 or TOEFL iBT 90+. MOI letters rejected by TU9 universities.",
+          "German-Taught: TestDaF Level 4x4, DSH-2, or Goethe C1."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('usa') || q.includes('america') || q.includes('united states')) {
       return {
-        title: "USA F-1 Visa Language Benchmark (2026 Ground-Truth):",
+        title: "USA F-1 Visa Language Benchmark:",
         bullets: [
-          "Language Cutoffs: IELTS Academic overall 6.5 (no subscore < 6.0), TOEFL iBT 80–90 (sectional subscores 20+), or PTE Academic 58–65.",
-          "Interview Fluency: Consular officers retain full discretion to test spoken English fluency during the 2-3 minute F-1 visa interview regardless of university waivers.",
-          cta
+          "Scores: IELTS 6.5 (no subscore < 6.0), TOEFL iBT 80–90, or PTE 58–65.",
+          "Interview Fluency: Consular officers test spoken English directly during the 2-minute F-1 visa interview."
         ],
         suggestAssessment: true
       };
     }
     return {
-      title: "PTE & IELTS Benchmarks by Target Destination (2026 Ground-Truth):",
+      title: "Language Cutoffs by Country:",
       bullets: [
-        "Canada: IELTS 6.5 (no band < 6.0) or PTE 60 (no skill < 58). MOI rejected by IRCC.",
-        "Australia: Undergrad IELTS 6.0–6.5; Master's IELTS 6.5 (no band < 6.0) or PTE 58–65. MOI rejected by DHA.",
-        "United Kingdom: Master's IELTS 6.5 / PTE 58–65. 70%+ in 12th English (CBSE/ICSE) gets MOI waiver (HBSE/PSEB excluded).",
-        "Germany: IELTS 6.5–7.0 or TOEFL 90+. MOI rejected by TU9 universities.",
-        cta
+        "Canada: IELTS 6.5 (no band < 6.0) or PTE 60. MOI strictly rejected.",
+        "Australia: IELTS 6.0–6.5 (Undergrad) / 6.5 (Master's) or PTE 58–65. MOI rejected.",
+        "UK: IELTS 6.5 / PTE 58–65. CBSE/ICSE 70%+ English gets MOI waiver (HBSE/PSEB excluded).",
+        "Germany: IELTS 6.5–7.0 / TOEFL 90+. MOI rejected by top public universities."
       ],
       suggestAssessment: true
     };
   }
 
-  // BRANCH A: PROFILE EVALUATION QUERIES (Gaps, Diplomas, HBSE/PSEB Boards) - ELIGIBILITY FIRST
+  // C. PROFILE EVALUATION QUERIES (Gaps, Diplomas, Board Scrutiny)
   const isProfileQuery = q.includes('gap') || q.includes('gpap') || q.includes('diploma') || q.includes('hbse') || q.includes('pseb') || q.includes('backlog') || q.includes('passout') || q.includes('12th') || q.includes('marks') || q.includes('percentage');
 
   if (isProfileQuery && !q.includes('cost') && !q.includes('fee')) {
     if (q.includes('australia')) {
       return {
-        title: "Australia Subclass 500 Eligibility & Gap Evaluation (2026 Ground-Truth):",
+        title: "Australia Subclass 500 Gap & Profile Rules:",
         bullets: [
-          "Class 12th & Diploma Gap Threshold: Australian Department of Home Affairs caps Class 12th and diploma gaps at a MAXIMUM of 1 year under Genuine Student (GS) criteria. A 2+ year gap after high school or a private diploma is EXTREMELY HIGH RISK under Section 500.214 unless backed by continuous regular Indian Bachelor's degree transcripts.",
-          "State Board Scrutiny: HBSE (Haryana Board) and PSEB (Punjab Board) face rigorous institutional discounting. Level 1 universities require 75%–85% raw aggregate, while many Level 2/3 regional providers restrict admissions from HBSE/PSEB entirely.",
-          "Postgraduate Master's Gap Limit: Gaps up to 2 to 3 years after graduation are acceptable ONLY if substantiated by official tax returns (Form 16/ITR), electronic bank-credited salary slips, and continuous employment contracts. Gaps > 3 years face near-universal rejection under GS assessment.",
-          "Recommended Strategic Alternative: If holding a 2+ year 12th gap or HBSE background, UK or Latvia/Europe offer 100% gap acceptance with verifiable resume records.",
-          cta
+          "12th / Diploma Gap: Max 1 year under Genuine Student (GS) criteria. 2+ year gap is HIGH RISK unless backed by regular Bachelor's transcripts.",
+          "State Boards: HBSE and PSEB require 75%–85% raw aggregate; Level 2/3 universities restrict HBSE/PSEB admissions.",
+          "Master's Gap: Accepted up to 2–3 years ONLY with tax returns (Form 16/ITR) and bank-credited salary slips."
         ],
         suggestAssessment: true
       };
@@ -233,13 +245,12 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('canada')) {
       return {
-        title: "Canada Study Permit Eligibility & Gap Evaluation (2026 Ground-Truth):",
+        title: "Canada Study Permit Gap & Profile Rules:",
         bullets: [
-          "Class 12th Gap Threshold: Capped at 1 year. Gaps exceeding 1 year require proof of competitive entrance exam preparation or diploma-level training.",
-          "Postgraduate Gap Threshold: Applicants can justify gaps up to 3 to 5 years provided they are supported by verifiable income tax returns (ITR), formal employment contracts, bank-credited salary statements, and provident fund (PF) records. Casual employment letters are rejected.",
-          "State Board Scrutiny: PSEB and HBSE applicants face strict scrutiny, requiring a minimum raw aggregate of 75% to 80% with detailed subject breakdowns in mathematics and science.",
-          "PAL Exemption: Master's and PhD programs at public DLIs are EXEMPT from Provincial Attestation Letter (PAL) cap rules.",
-          cta
+          "12th Gap: Max 1 year limit.",
+          "Postgraduate Gap: Up to 3–5 years accepted with verifiable ITRs, formal employment contracts, and bank salary credits.",
+          "State Boards: PSEB and HBSE require 75%–80%+ raw aggregate with strong math/science scores.",
+          "PAL Exemption: Master's and PhD programs at public DLIs are exempt from Provincial Attestation Letter (PAL) caps."
         ],
         suggestAssessment: true
       };
@@ -247,155 +258,137 @@ function retrieveGroundTruthResponse(userQuery) {
 
     if (q.includes('uk') || q.includes('united kingdom')) {
       return {
-        title: "UK Student Route Eligibility & Gap Evaluation (2026 Ground-Truth):",
+        title: "UK Student Route Gap & Board Rules:",
         bullets: [
-          "Class 12th Gap Limit: Capped at 1 to 2 years with proof of continuous learning.",
-          "Postgraduate Gap Limit: Accepted up to 3 to 5 years if substantiated by verifiable tax returns (Form 16/ITR) and bank statements reflecting salary deposits. Cash-in-hand salary letters trigger immediate Pre-CAS refusal.",
-          "State Board Discounting: PSEB and HBSE require 75% to 85% raw marks and are explicitly EXCLUDED from English MOI waivers.",
-          cta
+          "12th Gap: Max 1–2 years with proof of continuous learning.",
+          "Postgraduate Gap: Up to 3–5 years with tax returns (Form 16/ITR) and bank salary credits. Cash salary letters cause immediate CAS refusal.",
+          "State Boards: PSEB/HBSE require 75%–85% raw marks and are excluded from English MOI waivers."
         ],
         suggestAssessment: true
       };
     }
 
     return {
-      title: "Ground-Truth Profile Feasibility & Gap Matrix (2026 Baseline):",
+      title: "Study Visa Gap Tolerances:",
       bullets: [
-        "Australia: 12th/Diploma gap MAX 1 year under Genuine Student (GS) rules. Postgraduate gap max 2–3 yrs with bank-credited salary history.",
-        "Canada: 12th gap max 1 year. Master's gap max 3–5 yrs with ITRs and formal employment contracts.",
-        "United Kingdom: 12th gap 1–2 yrs. Postgraduate gap 3–5 yrs with Form 16/ITR. Cash salary letters rejected.",
-        "Germany: 12th gap max 1 yr for Studienkolleg. Master's gap 2–4 yrs with continuous employment records.",
-        cta
+        "Australia: 12th gap max 1 year; Master's gap max 2–3 years with bank salary history.",
+        "Canada: 12th gap max 1 year; Master's gap max 3–5 years with ITRs and formal work contracts.",
+        "UK: 12th gap max 1–2 years; Master's gap max 3–5 years with Form 16/ITR (no cash salary).",
+        "Germany: 12th gap max 1 year for Studienkolleg; Master's gap 2–4 years with work proof."
       ],
       suggestAssessment: true
     };
   }
 
-  // BRANCH A: SPOUSE & DEPENDENT VISA REGULATIONS
+  // D. SPOUSE & DEPENDENT VISA RULES
   if (q.includes('spouse') || q.includes('dependent') || q.includes('marriage') || q.includes('husband') || q.includes('wife')) {
     if (q.includes('australia') || q.includes('subclass 500')) {
       return {
-        title: "Australia Subclass 500 Spouse Visa Regulations (2026 Ground-Truth):",
+        title: "Australia Subclass 500 Spouse Visa Rules:",
         bullets: [
-          "Master's & Doctoral Enrolment: Spouses enjoy full, unrestricted work rights if the primary applicant is enrolled in a Master's degree (Coursework or Research) or Doctoral program.",
-          "Bachelor's / Diploma Restriction: Spouses accompanying Bachelor's degree students receive restricted work rights (up to 48 hours per fortnight).",
-          "Verification: Marriage registration (minimum 1-year living together) and joint bank account funds are strictly verified by Home Affairs under GS criteria.",
-          cta
+          "Master's / PhD Enrolment: Spouse receives full, unrestricted work rights.",
+          "Bachelor's / Diploma: Spouse work rights restricted to 48 hours per fortnight.",
+          "Verification: Min 1-year marriage registration & joint bank funds strictly audited under GS rules."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('uk') || q.includes('united kingdom')) {
       return {
-        title: "UK Student Route Spouse / Dependent Visa Rules (2026 Ground-Truth):",
+        title: "UK Student Route Spouse Visa Rules:",
         bullets: [
-          "Taught Master's Restriction: Dependent visa rights for taught Master's students were ELIMINATED by UKVI.",
-          "Exempt Programs: Spouses are allowed ONLY if the primary student is enrolled in a PhD / Doctoral program or a research-based Postgraduate program.",
-          cta
+          "Taught Master's: Spouses are ELIMINATED from accompanying taught Master's students by UKVI.",
+          "Exempt Programs: Spouses allowed ONLY for PhD / Doctoral or research-based Master's degrees."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('canada')) {
       return {
-        title: "Canada Spousal Open Work Permit (SOWP) Rules (2026 Ground-Truth):",
+        title: "Canada Spousal Open Work Permit (SOWP):",
         bullets: [
-          "Master's & PhD Exemption: Spousal Open Work Permits (SOWP) are restricted to spouses of students enrolled in Master's, Doctoral, or specific professional degree programs at public DLIs.",
-          "Public College & Diploma Restriction: Spouses of students in public college undergraduate diploma courses are INELIGIBLE for SOWP.",
-          cta
+          "Master's & PhD: Spouses of Master's/PhD/professional degree students at public DLIs qualify for SOWP.",
+          "Public College Diplomas: Spouses of undergraduate college diploma students are INELIGIBLE for SOWP."
         ],
         suggestAssessment: true
       };
     }
   }
 
-  // BRANCH A: UK UNIVERSITIES INQUIRIES
+  // E. UK UNIVERSITIES INQUIRIES
   if (q.includes('uk') && (q.includes('univer') || q.includes('college') || q.includes('study most') || q.includes('popular') || q.includes('best') || q.includes('top'))) {
     return {
-      title: "Top & Popular UK Universities for Indian Students (2026 Ground-Truth):",
+      title: "Top UK Universities for Indian Students:",
       bullets: [
-        "Tier-1 Research Universities: University of Oxford, University of Cambridge, Imperial College London, University College London (UCL), University of Edinburgh, University of Manchester, University of Bristol.",
-        "Mid-Tier & Popular Destinations: University of Birmingham, University of Nottingham, University of Sheffield, Newcastle University, University of East Anglia, Nottingham Trent University, University of De Montfort, University of Hertfordshire, Coventry University, University of Greenwich, Birmingham City University.",
-        "High-Employability Fields: Data Science, Artificial Intelligence, Advanced Mechanical Engineering, Biotechnology, Healthcare Management, Finance, and Cyber Security.",
-        cta
+        "Tier-1 Universities: Oxford, Cambridge, Imperial, UCL, Edinburgh, Manchester, Bristol.",
+        "Popular & Accessible Options: Birmingham, Nottingham, Sheffield, Newcastle, De Montfort, Greenwich, Hertfordshire, Coventry, Birmingham City.",
+        "High-Employability Courses: Data Science, AI, Mechanical Eng, Biotech, Finance, Cyber Security."
       ],
       suggestAssessment: true
     };
   }
 
-  // BRANCH A: LATVIA STUDY VISA COST & PROCESS
+  // F. LATVIA STUDY VISA COST & PROCESS
   if (q.includes('latvia')) {
     return {
-      title: "Latvia Study Visa Cost & Financial Breakdown (2026 Ground-Truth):",
+      title: "Latvia Study Visa & Financial Breakdown:",
       bullets: [
-        "Stage 1: Pre-Admission & AIC Verification – Application fee €150 – €300 (~₹13,500 – ₹27,000 INR) + mandatory AIC credential verification €50 – €100 (~₹4,500 – ₹9,000 INR). Processing takes 4 weeks.",
-        "Stage 2: 1st Year Tuition Fee – Annual tuition fee €3,000 – €6,000 / year (~₹2.70 Lakhs – ₹5.40 Lakhs INR) for Bachelor's or Master's at RTU, University of Latvia, or TSI.",
-        "Stage 3: Living Maintenance Norm – €500 – €650 / month (~₹45,000 – ₹58,500 INR/month).",
-        "Stage 4: Embassy D-Visa & Legalization – D-Visa fee €60 + HRD & MEA Apostille attestation (~₹7,500 – ₹15,000 INR).",
-        "Stage 5: Verifiable Bank Show Money – Bank statement showing minimum €6,000 liquid funds held in student or parent account (~₹5.50 Lakhs – ₹6.50 Lakhs INR).",
-        "Post-Study Work Permit: 9-month post-study work permit.",
-        cta
+        "Tuition Fee: €3,000–€6,000 / year (~₹2.70L–₹5.40L INR) at RTU, University of Latvia, or TSI.",
+        "Living Expenses: €500–€650 / month (~₹45,000–₹58,500 INR).",
+        "Bank Show Money: €6,000 liquid balance (~₹5.50L–₹6.50L INR).",
+        "Post-Study Work: 9-month post-study work permit upon graduation."
       ],
       suggestAssessment: true
     };
   }
 
-  // BRANCH A: SINGLE-COUNTRY COST BREAKDOWN INQUIRIES
+  // G. STEPWISE COST BREAKDOWN QUERIES
   if (q.includes('cost') || q.includes('costing') || q.includes('fee') || q.includes('expense') || q.includes('stepwise')) {
     if (q.includes('canada')) {
       return {
-        title: "Canada Study Permit Financial & Cost Breakdown (2026 Ground-Truth):",
+        title: "Canada Cost Breakdown:",
         bullets: [
-          "Stage 1: Pre-Admission – $300 – $600 CAD (~₹18,300 – ₹36,600 INR) WES ($240 CAD), IELTS fee, app fees.",
-          "Stage 2: 1st Year Tuition Deposit – $16,000 – $35,000 CAD (~₹9.76 Lakhs – ₹21.35 Lakhs INR) paid to public DLI.",
-          "Stage 3: Mandatory GIC Living Deposit – $22,895 CAD (~₹13.96 Lakhs INR) mandatory living deposit in Scotiabank/CIBC outside Quebec ($24,617 CAD in Quebec).",
-          "Stage 4: Visa & Biometrics – $150 CAD Visa + $85 CAD Biometrics (~₹14,335 INR total).",
-          "Stage 5: Liquid Bank Show Money – Tuition + GIC ($22,895 CAD) (~₹25 Lakhs – ₹38 Lakhs INR total).",
-          cta
+          "Pre-Admission: $300–$600 CAD (~₹18k–₹36k INR) WES evaluation, IELTS & application fees.",
+          "Tuition Deposit: $16,000–$35,000 CAD / year (~₹9.76L–₹21.35L INR) to public DLI.",
+          "GIC Living Deposit: $22,895 CAD (~₹13.96L INR) mandatory living deposit.",
+          "Visa Fees: $150 CAD Visa + $85 CAD Biometrics (~₹14,335 INR total)."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('germany')) {
       return {
-        title: "Germany Admission & Blocked Account Cost Breakdown (2026 Ground-Truth):",
+        title: "Germany Cost Breakdown:",
         bullets: [
-          "Stage 1: Pre-Admission & APS – APS verification fee ₹18,000 INR (takes 4–8+ wks) + Uni-Assist fee (€75 1st school, €30 subsequent).",
-          "Stage 2: 1st Year Tuition Deposit – Public tuition €0; semester contribution €150 – €400 / semester (~₹13,500 – ₹36,000 INR).",
-          "Stage 3: Mandatory Blocked Account (Sperrkonto) – €11,904 / year (~₹10.71 Lakhs INR) (§ 16b AufenthG; €992/month withdrawal).",
-          "Stage 4: Visa & Health Insurance – Visa fee €75 + VFS charges (~₹7,500 INR) + Public health insurance (TK/AOK) €120 – €140 / month.",
-          cta
+          "APS & Pre-Admission: APS fee ₹18,000 INR + Uni-Assist fee (€75 1st school).",
+          "Public Tuition: €0 tuition; semester contribution €150–€400 / semester.",
+          "Blocked Account: €11,904 / year (~₹10.71L INR) mandatory blocked deposit.",
+          "Health Insurance & Visa: €120–€140 / month public insurance + €75 Visa fee."
         ],
         suggestAssessment: true
       };
     }
     if (q.includes('uk') || q.includes('united kingdom')) {
       return {
-        title: "UK Student Route Cost Breakdown (2026 Ground-Truth):",
+        title: "UK Cost Breakdown:",
         bullets: [
-          "Stage 1: Pre-Admission – £150 – £300 (~₹15,900 – ₹31,800 INR) IELTS/PTE exam fees & transcript apostille.",
-          "Stage 2: 1st Year Tuition Deposit – £14,000 – £26,000 (~₹14.84L – ₹27.56L INR/yr). Deposit of £2,000 – £5,000 required for CAS.",
-          "Stage 3: Living & Healthcare – £1,334/mo London (£12,006 for 9 mos) or £1,023/mo Outer (£9,207 for 9 mos) + IHS (£776/yr).",
-          "Stage 4: Visa & Embassy – UKVI Visa fee £490 (~₹51,940 INR) + IHS Healthcare Surcharge £776/year.",
-          "Stage 5: Verifiable Bank Show Money – Tuition Balance + 9 Months Living (~₹20 Lakhs – ₹38 Lakhs INR) held for 28 consecutive days.",
-          cta
+          "Tuition Deposit: £14,000–£26,000 / year tuition. £2,000–£5,000 deposit required for CAS.",
+          "Living Maintenance: £1,334/mo (London) or £1,023/mo (Outer London) for 9 months.",
+          "Visa & IHS: UKVI Visa fee £490 (~₹51,940 INR) + IHS Health Surcharge £776 / year."
         ],
         suggestAssessment: true
       };
     }
   }
 
-  // BRANCH A: SPECIFIC COVERED COUNTRY HANDLERS
+  // H. SPECIFIC COVERED COUNTRY HANDLERS
   if (q.includes('usa') || q.includes('united states') || q.includes('america')) {
     return {
-      title: "United States (USA) F-1 Visa Breakdown (2026 Ground-Truth):",
+      title: "USA F-1 Visa Key Breakdown:",
       bullets: [
-        "Regulatory Scrutiny: INA Section 214(b) non-immigrant intent evaluation during 2-3 minute physical consular interview (30-35% refusal rate in India).",
-        "Form I-20 Cost: $35,000 – $75,000 USD / year (~₹29.4L – ₹63L INR/year) tuition + living.",
-        "SEVIS & Visa Fees: SEVIS I-901 fee $350 USD + MRV Visa application fee $185 USD (~₹44,940 INR total).",
-        "Liquid Funds: 100% of Form I-20 amount required in verifiable liquid savings/FDs/loans (~₹30L – ₹65L INR). Multi-year projected funds 1.5x–2x total course cost.",
-        "PSWP & STEM OPT: 12 months OPT; STEM-designated degrees receive +24 months extension (total 36 months OPT). H-1B dual intent visa via annual lottery.",
-        cta
+        "Form I-20 Cost: $35,000–$75,000 USD / year tuition + living (~₹29.4L–₹63L INR).",
+        "Fees: SEVIS I-901 fee $350 USD + MRV Visa fee $185 USD (~₹44,940 INR).",
+        "Interview & STEM OPT: INA 214(b) non-immigrant intent physical interview. 12-month OPT + 24-month STEM extension (36 months total)."
       ],
       suggestAssessment: true
     };
@@ -403,13 +396,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('france')) {
     return {
-      title: "France Study Visa Breakdown (2026 Ground-Truth):",
+      title: "France Study Visa Breakdown:",
       bullets: [
-        "Campus France Process: Mandatory pre-consular screening and interview on Études en France (EeF) portal. Campus France fee €200 – €400 (~₹18,000 – ₹36,000 INR).",
-        "Tuition & Living: Public university tuition €2,770 – €3,770/year (Grandes Écoles business schools €10,000 – €20,000/year). Living norm €615/month (€7,380/year) (~₹6.64 Lakhs INR).",
-        "Visa & Show Money: Long-stay VLS-TS Visa €50. Bank statement history showing €7,380 living + tuition balance.",
-        "PSWP: 2-year APS (Autorisation Provisoire de Séjour) post-study work permit for Master's graduates.",
-        cta
+        "Tuition & Living: Public tuition €2,770–€3,770/yr; Grandes Écoles €10k–€20k/yr. Living norm €615/month (~₹6.64L INR/yr).",
+        "Process & Visa: Campus France screening (€200–€400) + VLS-TS Visa (€50).",
+        "Post-Study Work: 2-year APS work permit for Master's graduates."
       ],
       suggestAssessment: true
     };
@@ -417,13 +408,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('italy')) {
     return {
-      title: "Italy Study Visa Breakdown (2026 Ground-Truth):",
+      title: "Italy Study Visa Breakdown:",
       bullets: [
-        "Universitaly & CIMEA: Pre-enrollment via Universitaly portal + CIMEA Statement of Comparability (€150).",
-        "Tuition & Living: Public university tuition €900 – €4,000/year (based on ISEE family income). Mandatory living expenses €6,000 – €7,000/year (~₹5.40L – ₹6.30L INR).",
-        "Visa & Show Money: Type D Student Visa €50. Minimum €6,000 liquid bank balance required (6-month history). Pending DSU scholarship does NOT exempt financial proof.",
-        "PSWP: 1-year post-study work permit (Permesso di Soggiorno per Ricerca Occupazione).",
-        cta
+        "Tuition & Living: Public tuition €900–€4,000/yr (income-based). Living expenses €6,000–€7,000/yr.",
+        "Visa & Show Money: Type D Student Visa €50. Min €6,000 liquid bank balance required (6-month history).",
+        "Post-Study Work: 1-year job search permit upon graduation."
       ],
       suggestAssessment: true
     };
@@ -431,12 +420,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('netherlands') || q.includes('dutch')) {
     return {
-      title: "Netherlands TEV Visa Breakdown (2026 Ground-Truth):",
+      title: "Netherlands TEV Visa Breakdown:",
       bullets: [
-        "WO vs HBO Structure: WO Research Universities require 75%-85% 12th (CBSE/ICSE) or 4-yr B.Tech; 3-yr degrees require 1-yr Pre-Master's. HBO Applied Sciences accept 65%-75% 12th (including State Boards PSEB/HBSE).",
-        "IND Living Norm & Fees: Mandatory IND living allowance €13,569.24/year (€1,130.77/month) (~₹12.21 Lakhs INR). IND Visa fee €254 (~₹22,860 INR). Non-EU tuition €11,000 – €22,000/year.",
-        "PSWP: 1-year Orientation Year Visa (Zoekjaar) within 3 years of graduation.",
-        cta
+        "Structure: WO Research (75%+ 12th / 4-yr B.Tech) vs HBO Applied Sciences (65%+ 12th including HBSE/PSEB).",
+        "IND Living & Fees: IND mandatory living allowance €13,569.24/year (€1,130.77/mo). IND Visa fee €254. Non-EU tuition €11k–€22k/yr.",
+        "Post-Study Work: 1-year Orientation Year Visa (Zoekjaar)."
       ],
       suggestAssessment: true
     };
@@ -444,11 +432,10 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('finland') || q.includes('sweden')) {
     return {
-      title: "Finland & Sweden Nordic Visa Breakdown (2026 Ground-Truth):",
+      title: "Finland & Sweden Nordic Visa Breakdown:",
       bullets: [
-        "Finland: Apply via Studyinfo.fi. Migri online residence permit fee €600. Non-EU tuition €8,000 – €18,000/year. Mandatory living proof €9,600/year (€800/month) held in student's OWN personal bank account (joint/parent accounts REJECTED). 2-year post-study permit.",
-        "Sweden: Apply via Universityadmissions.se. Migrationsverket fee SEK 1,500. Non-EU tuition SEK 90,000 – 140,000/year. Mandatory living proof SEK 103,140/year held in student's personal account. 1-year post-study permit.",
-        cta
+        "Finland: Tuition €8,000–€18,000/yr. Mandatory living proof €9,600/yr (€800/mo) in student's OWN account. 2-year post-study permit.",
+        "Sweden: Tuition SEK 90,000–140,000/yr. Living proof SEK 103,140/yr in personal account. 1-year post-study permit."
       ],
       suggestAssessment: true
     };
@@ -456,12 +443,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('ireland')) {
     return {
-      title: "Ireland Student Visa Breakdown (2026 Ground-Truth):",
+      title: "Ireland Student Visa Breakdown:",
       bullets: [
-        "Academic Criteria: Undergrad 70%-80% (CBSE/ICSE) or 80%+ (State Boards). Master's 60%-65% (First Class). IELTS 6.5 (no sub-score < 6.0) or PTE 61. MOI rejected.",
-        "Financial Proof: ISD mandatory living proof €10,000 (~₹9.00 Lakhs INR) + 1st year tuition balance (€10,000 – €22,000). Continuous 6-month bank statement history required. Unexplained sudden deposits lead to refusal.",
-        "PSWP: Stamp 1G: Bachelor's 1 year; Master's 2 years.",
-        cta
+        "Academics: Undergrad 70%–80% (CBSE/ICSE) / 80%+ (State Boards). Master's 60%–65%. IELTS 6.5 / PTE 61.",
+        "Financials: ISD mandatory living proof €10,000 + 1st year tuition balance. 6-month clear bank statement required.",
+        "Post-Study Work: Stamp 1G: Bachelor's 1 year; Master's 2 years."
       ],
       suggestAssessment: true
     };
@@ -469,12 +455,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('new zealand') || q.includes('nz')) {
     return {
-      title: "New Zealand Fee Paying Student Visa Breakdown (2026 Ground-Truth):",
+      title: "New Zealand Student Visa Breakdown:",
       bullets: [
-        "NZQF Levels: Undergrad Level 7 (65%-75% CBSE/ICSE, 75%-80% State Boards); Master's Level 9 (60%+). IELTS 6.0 (Undergrad) / 6.5 (Master's) or PTE 58. MOI rejected.",
-        "Financial Maintenance: INZ living maintenance norm $20,000 NZD/year ($1,666/month) (~₹10.00 Lakhs INR). Visa fee $750 NZD. 6-month bank history required or ANZ Funds Transfer Scheme (FTS).",
-        "PSWP: Master's Level 9: 3-year Post-Study Work Visa; Bachelor's Level 7: 3-year Post-Study Work Visa.",
-        cta
+        "Academics: Undergrad Level 7 (65%+ CBSE, 75%+ State Boards); Master's Level 9 (60%+). IELTS 6.0–6.5 or PTE 58.",
+        "Maintenance: INZ living norm $20,000 NZD/year ($1,666/mo). Visa fee $750 NZD. 6-month bank history or FTS.",
+        "Post-Study Work: 3-year Post-Study Work Visa for Bachelor's (L7) & Master's (L9)."
       ],
       suggestAssessment: true
     };
@@ -482,12 +467,11 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('singapore')) {
     return {
-      title: "Singapore Student's Pass Breakdown (2026 Ground-Truth):",
+      title: "Singapore Student's Pass Breakdown:",
       bullets: [
-        "Public vs PEI: Autonomous Public (NUS/NTU/SMU 90%+ 12th, IELTS 6.5+) vs EduTrust PEIs (55%+ 12th including State Boards, IELTS 6.0). D2D transfer pathways to UK/Australia.",
-        "Costs & Visa: Tuition SGD $14,000 – $38,000/year (~₹8.68L – ₹23.56L INR). Living SGD $12,000 – $15,000/year. ICA SOLAR processing fee SGD $90 ($5,580 INR). Show money SGD $30,000 liquid (3-month history).",
-        "PSWP: Public university 1-year LTVP; PEI graduates must secure immediate corporate EP/S Pass sponsorship.",
-        cta
+        "Public vs PEI: Public (NUS/NTU 90%+ 12th) vs EduTrust PEIs (55%+ 12th). D2D transfer options to UK/Australia.",
+        "Costs & Visa: Tuition SGD $14,000–$38,000/yr. Living SGD $12,000–$15,000/yr. Show money SGD $30,000 liquid.",
+        "Post-Study Work: Public university 1-year LTVP; PEI graduates require corporate Employment Pass."
       ],
       suggestAssessment: true
     };
@@ -495,24 +479,20 @@ function retrieveGroundTruthResponse(userQuery) {
 
   if (q.includes('poland') || q.includes('spain') || q.includes('malta') || q.includes('mauritius') || q.includes('cyprus') || q.includes('dubai') || q.includes('uae') || q.includes('korea') || q.includes('japan') || q.includes('russia')) {
     return {
-      title: "Global Visa & Financial Guidelines (2026 Ground-Truth):",
+      title: "Global Study & Visa Guidelines:",
       bullets: [
-        "Poland: Tuition €2,500–€5,500/yr, Living €550–€700/mo, Bank show money PLN 12,000 + travel. Visa €80. 9-month TRC post-study permit.",
-        "Spain: Public tuition €2,500–€6,000/yr, IPREM living norm €600/mo (€7,200/yr), Visa €80. 12-month post-study job search permit.",
-        "Malta: Tuition €5,000–€9,000/yr, Living €800/mo (€9,600/yr), Visa €100 + VFS. 9-month post-study work permit.",
-        "Mauritius: Tuition $4,000–$9,000/yr, Living $3,000–$5,000/yr, Visa $150, Show money $4,000. 1-year Young Professional Permit.",
-        "Cyprus: Tuition €3,000–€7,000/yr, Living €4,000–€6,000/yr, Ministry Entry Permit €150, Show money €7,000.",
-        "UAE (Dubai): Tuition AED 45,000–95,000/yr, Living AED 30,000–45,000/yr, GDRFA Entry Permit & Medical AED 3,000–5,000. 5-Year Green Visa option.",
-        "South Korea: D-2 Visa. 12th/Bachelor's 60%+. Tuition ₩4M–₩10M/yr, Living $10k–$12k/yr, Show money $20,000. D-10 Job Seeker Visa.",
-        "Japan: Bachelor's 65%+; Master's 4-yr degree. Tuition ¥800k–¥1.5M/yr, Living ¥1M–¥1.2M/yr, Visa ¥3,000, Bank show money ¥2,000,000. Designated Activities Visa.",
-        "Russia: General Medicine (PCB 50% General, 40% Reserved; NEET-UG required for India registration). Tuition RUB 250k–550k/yr (~₹2.30L–₹5.06L INR), Living RUB 150k–250k/yr, Show money RUB 200k–400k (unaged). RVPO / RVP permits.",
-        cta
+        "Poland: Tuition €2,500–€5,500/yr, Living €550–€700/mo, Show money PLN 12,000. 9-month TRC permit.",
+        "Spain: Tuition €2,500–€6,000/yr, Living €600/mo, Visa €80. 12-month post-study permit.",
+        "Dubai (UAE): Tuition AED 45k–95k/yr, Living AED 30k–45k/yr. 5-Year Green Visa option.",
+        "South Korea: Tuition ₩4M–₩10M/yr, Living $10k–$12k/yr, Show money $20,000. D-10 Visa.",
+        "Japan: Tuition ¥800k–¥1.5M/yr, Living ¥1M–¥1.2M/yr, Show money ¥2,000,000.",
+        "Russia (MBBS): NEET-UG required. Tuition RUB 250k–550k/yr (~₹2.30L–₹5.06L INR)."
       ],
       suggestAssessment: true
     };
   }
 
-  // BRANCH B DEFAULT (GATE 2 FAIL - Facts not fully specified)
+  // DEFAULT (GATE 2 FAIL - Facts not fully specified for custom query)
   return escalationResponse;
 }
 
