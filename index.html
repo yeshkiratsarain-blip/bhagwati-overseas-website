@@ -1213,10 +1213,25 @@
         if (homePlaceholder) homePlaceholder.innerHTML = getRadarHTML(true);
         lucide.createIcons();
 
+        function parseNewsDate(dateStr) {
+          if (!dateStr || typeof dateStr !== 'string') return 0;
+          const trimmed = dateStr.trim();
+          const timestamp = Date.parse(trimmed);
+          if (!isNaN(timestamp)) return timestamp;
+          const dmyMatch = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+          if (dmyMatch) {
+            return new Date(parseInt(dmyMatch[3], 10), parseInt(dmyMatch[2], 10) - 1, parseInt(dmyMatch[1], 10)).getTime();
+          }
+          return 0;
+        }
+
         if (!targetId || targetId.trim() === '' || targetId.includes('YOUR_SPREADSHEET_ID')) {
           // Demo fallback
           setTimeout(() => {
-            const html = getRadarHTML(false, FALLBACK_NEWS);
+            const sortedFallback = [...FALLBACK_NEWS]
+              .sort((a, b) => parseNewsDate(b.date) - parseNewsDate(a.date))
+              .slice(0, 10);
+            const html = getRadarHTML(false, sortedFallback);
             if (container) container.innerHTML = html;
             if (homePlaceholder) homePlaceholder.innerHTML = html;
             lucide.createIcons();
@@ -1282,14 +1297,21 @@
             }
           }
 
-          const html = getRadarHTML(false, uniqueNews);
+          // Sort by date descending (freshest / newest first) and limit to 10
+          uniqueNews.sort((a, b) => parseNewsDate(b.date) - parseNewsDate(a.date));
+          const top10News = uniqueNews.slice(0, 10);
+
+          const html = getRadarHTML(false, top10News);
           if (container) container.innerHTML = html;
           if (homePlaceholder) homePlaceholder.innerHTML = html;
           lucide.createIcons();
         } catch (err) {
           console.warn(err);
           // Fallback on error
-          const html = getRadarHTML(false, FALLBACK_NEWS);
+          const sortedFallback = [...FALLBACK_NEWS]
+            .sort((a, b) => parseNewsDate(b.date) - parseNewsDate(a.date))
+            .slice(0, 10);
+          const html = getRadarHTML(false, sortedFallback);
           if (container) container.innerHTML = html;
           if (homePlaceholder) homePlaceholder.innerHTML = html;
           lucide.createIcons();

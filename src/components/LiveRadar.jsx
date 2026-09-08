@@ -122,11 +122,42 @@ export default function LiveRadar() {
         }
       }
 
-      setNews(uniqueNews);
+      // Robust date parsing helper
+      const parseNewsDate = (dateStr) => {
+        if (!dateStr || typeof dateStr !== 'string') return 0;
+        const trimmed = dateStr.trim();
+        const timestamp = Date.parse(trimmed);
+        if (!isNaN(timestamp)) return timestamp;
+        const dmyMatch = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+        if (dmyMatch) {
+          return new Date(parseInt(dmyMatch[3], 10), parseInt(dmyMatch[2], 10) - 1, parseInt(dmyMatch[1], 10)).getTime();
+        }
+        return 0;
+      };
+
+      // Sort by date descending (most fresh & newest on top) and slice top 10 only
+      uniqueNews.sort((a, b) => parseNewsDate(b.date) - parseNewsDate(a.date));
+      const top10News = uniqueNews.slice(0, 10);
+
+      setNews(top10News);
       setLoading(false);
     } catch (err) {
       console.warn(err);
-      setNews(FALLBACK_NEWS);
+      const parseNewsDate = (dateStr) => {
+        if (!dateStr || typeof dateStr !== 'string') return 0;
+        const trimmed = dateStr.trim();
+        const timestamp = Date.parse(trimmed);
+        if (!isNaN(timestamp)) return timestamp;
+        const dmyMatch = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+        if (dmyMatch) {
+          return new Date(parseInt(dmyMatch[3], 10), parseInt(dmyMatch[2], 10) - 1, parseInt(dmyMatch[1], 10)).getTime();
+        }
+        return 0;
+      };
+      const sortedFallback = [...FALLBACK_NEWS]
+        .sort((a, b) => parseNewsDate(b.date) - parseNewsDate(a.date))
+        .slice(0, 10);
+      setNews(sortedFallback);
       setLoading(false);
     }
   };
