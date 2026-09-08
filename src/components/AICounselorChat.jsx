@@ -2,14 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Send, X, ShieldCheck, ArrowUpRight, Sparkles } from 'lucide-react';
 
 const QUICK_PROMPTS = [
-  "Hi! How can you help me?",
-  "Can you tell me anything about study abroad industry?",
-  "In which UK universities do Indian students study most?",
-  "PTE score requirements for Canada SDS visa?",
-  "12th HBSE 75% aggregate for Australia Subclass 500?",
-  "Germany Blocked Account & living cost requirement?",
-  "Canada GIC deposit + 1st year tuition breakdown?",
-  "Australia Subclass 500 Spouse Visa eligibility?"
+  { chip: "75% in HBSE 12th for Australia?", text: "Can I apply for an Australia student visa with 75% in 12th HBSE?" },
+  { chip: "IELTS Waiver in UK with 80% CBSE?", text: "Can I get an IELTS waiver in the UK with 80% in 12th CBSE?" },
+  { chip: "5-Year Gap for Canada Master's?", text: "Can I apply for a Master's degree in Canada with a 5-year gap?" },
+  { chip: "Australia Spouse Visa Rules?", text: "Am I eligible for an Australia student spouse visa?" },
+  { chip: "Cost to Study in Latvia?", text: "How much does it cost to study for a Bachelor's degree in Latvia?" },
+  { chip: "Canada Tuition & GIC Cost?", text: "What are the 1st-year tuition fees and GIC costs for Canada?" },
+  { chip: "Germany Blocked Account & Living Cost?", text: "What are the Blocked Account and living cost requirements for Germany?" },
+  { chip: "PTE Score Required for Canada Visa?", text: "What is the required PTE score for a Canada student visa?" },
+  { chip: "Top UK Universities for Indian Students?", text: "Which UK universities are most popular among Indian students?" },
+  { chip: "How Can You Help Me?", text: "Hello! How can you help me with my study abroad options?" }
 ];
 
 // Helper to render dynamic AI response content (supports strings, arrays, bold titles, bullets)
@@ -280,17 +282,17 @@ export default function AICounselorChat({ isOpen, onClose, onOpenAssessment }) {
         <div className="ai-quick-prompts">
           <span className="prompts-label">Quick Prompts:</span>
           <div className="prompts-scroll">
-            {QUICK_PROMPTS.map((prompt, pIdx) => (
+            {QUICK_PROMPTS.map((item, pIdx) => (
               <button 
                 key={pIdx} 
                 type="button"
                 className="prompt-chip" 
                 onClick={(e) => {
                   e.preventDefault();
-                  handleSend(prompt);
+                  handleSend(item.text);
                 }}
               >
-                {prompt}
+                {item.chip}
               </button>
             ))}
           </div>
@@ -307,7 +309,7 @@ export default function AICounselorChat({ isOpen, onClose, onOpenAssessment }) {
           <input 
             type="text" 
             className="ai-chat-input"
-            placeholder="Ask any question e.g. popular UK universities for Indian students..."
+            placeholder="e.g. Can I apply for Australia with 75% in 12th HBSE?"
             value={inputMsg}
             onChange={(e) => setInputMsg(e.target.value)}
             autoCapitalize="sentences"
